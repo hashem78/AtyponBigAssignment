@@ -1,0 +1,6 @@
+rootProject.name = 'SGS_P1'
+include 'domain'
+include 'server'
+include 'client'
+include 'cqrs'
+
