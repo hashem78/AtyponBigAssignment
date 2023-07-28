@@ -79,7 +79,6 @@ class MainMenuView implements View {
         };
 
         IntStream.range(0, viewProperties.length)
-                .filter()
                 .mapToObj(i -> new ViewMapping(i, viewProperties[i]))
                 .forEach(System.out::println);
 
