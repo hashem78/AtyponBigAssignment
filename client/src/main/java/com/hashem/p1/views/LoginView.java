@@ -1,8 +1,10 @@
 package com.hashem.p1.views;
 
+import com.hashem.p1.UserDoesNotExistException;
 import com.hashem.p1.auth.AuthException;
 import com.hashem.p1.context.Context;
 
+import java.sql.SQLException;
 import java.util.Scanner;
 
 public class LoginView implements View {
@@ -17,8 +19,10 @@ public class LoginView implements View {
         var password = scanner.next();
         try {
             context.authService().loginWithEmailAndPassword(email, password);
-        } catch (AuthException ex) {
-            System.out.println(ex.getMessage());
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (UserDoesNotExistException e) {
+            System.out.println("Email or password are wrong");
         }
     }
 }

@@ -1,10 +1,11 @@
 package com.hashem.p1.commands;
 
-import com.hashem.p1.helpers.BasicObjectVisitor;
+import com.hashem.p1.Response;
 
 public class CreateClassCommand extends BasicCommand {
     @Override
-    void accept(BasicCommandVisitor visitor) {
-        visitor.visit(this);
+    public Response accept(BasicCommandVisitor visitor) {
+
+        return visitor.visit(this);
     }
 }

@@ -1,6 +1,7 @@
 package com.hashem.p1.models;
 
-import com.hashem.p1.interfaces.Root;
+import lombok.Builder;
 
-public record Role(int id, int user_id, String name) implements Root {
+@Builder
+public record Role(int id, String name) {
 }

@@ -4,4 +4,6 @@ include 'server'
 include 'client'
 include 'cqrs'
 include 'shared'
+include 'data_access'
+include 'persistence'
 

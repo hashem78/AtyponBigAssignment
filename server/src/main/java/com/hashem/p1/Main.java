@@ -2,15 +2,10 @@ package com.hashem.p1;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hashem.p1.commands.BasicCommand;
 import com.hashem.p1.helpers.BasicObject;
-import com.hashem.p1.helpers.BasicObjectVisitor;
-import com.hashem.p1.helpers.DefaultBasicObjectVisitor;
+import com.hashem.p1.visitors.DefaultBasicObjectVisitor;
 import com.hashem.p1.helpers.HttpResponseBuilder;
-import com.hashem.p1.queries.BasicQuery;
-import com.hashem.p1.queries.GetUsersQuery;
 import rawhttp.core.RawHttp;
-import rawhttp.core.RawHttpResponse;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -75,8 +70,14 @@ class ClientTask implements Runnable {
                 try (var bodyReader = optionalBody.get().eager()) {
                     var body = bodyReader.toString();
                     var basicObject = objectMapper.readValue(body, BasicObject.class);
+                    System.out.println(basicObject);
                     var visitor = new DefaultBasicObjectVisitor();
-                    basicObject.accept(visitor);
+                    var response = basicObject.accept(visitor);
+                    if (response == null)
+                        return;
+                    var responseBody = objectMapper.writeValueAsString(response);
+                    var responseString = HttpResponseBuilder.JsonResponse(responseBody);
+                    http.parseResponse(responseString).eagerly().writeTo(socket.getOutputStream());
                 }
             } else {
                 System.out.println("No body!");

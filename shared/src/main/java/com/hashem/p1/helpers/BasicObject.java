@@ -2,6 +2,7 @@ package com.hashem.p1.helpers;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.hashem.p1.Response;
 import com.hashem.p1.commands.BasicCommand;
 import com.hashem.p1.queries.BasicQuery;
 
@@ -13,5 +14,5 @@ import com.hashem.p1.queries.BasicQuery;
         @JsonSubTypes.Type(value = BasicCommand.class, name = "command"),
 })
 public interface BasicObject {
-    void accept(BasicObjectVisitor visitor);
+    Response accept(BasicObjectVisitor visitor);
 }

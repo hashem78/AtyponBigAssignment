@@ -1,13 +1,14 @@
 package com.hashem.p1.commands;
+import com.hashem.p1.Response;
 
 public interface BasicCommandVisitor {
-    void visit(AddUserCommand command);
+    Response visit(AddUserCommand command);
 
-    void visit(AddUserToClassCommand command);
+    Response visit(AddUserToClassCommand command);
 
-    void visit(CreateClassCommand command);
+    Response visit(CreateClassCommand command);
 
-    void visit(RemoveUserCommand command);
+    Response visit(RemoveUserCommand command);
 
-    void visit(RemoveUserFromClassCommand command);
+    Response visit(RemoveUserFromClassCommand command);
 }

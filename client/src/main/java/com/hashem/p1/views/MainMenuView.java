@@ -23,22 +23,20 @@ public class MainMenuView implements View {
     public void run(Context context) {
 
         var authState = context.authService().getAuthState();
+        var user = context.authService().getUser();
         List<MainMenuView.ViewProperties> viewProperties = switch (authState) {
-            case LoggedIn -> {
-
-                yield new ArrayList<>() {
-                    {
-                        add(new MainMenuView.ViewProperties("logout", "Logout"));
-                    }
-                };
-            }
-            case LoggedOut -> {
-                yield new ArrayList<>() {
-                    {
-                        add(new MainMenuView.ViewProperties("login", "Login"));
-                    }
-                };
-            }
+            case LoggedIn -> new ArrayList<>() {
+                {
+                    if(user.hasRole("admin"))
+                        add(new ViewProperties("get_users", "Get All Users"));
+                    add(new ViewProperties("logout", "Logout"));
+                }
+            };
+            case LoggedOut -> new ArrayList<>() {
+                {
+                    add(new ViewProperties("login", "Login"));
+                }
+            };
         };
 
         viewProperties.add(new MainMenuView.ViewProperties("exit", "Exit"));
