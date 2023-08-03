@@ -18,6 +18,7 @@ public class GetUsersView implements View {
             var bodyJson = context.objectMapper().writeValueAsString(new GetUsersQuery());
             var json = HttpRequestBuilder.JsonRequest(bodyJson);
             try (var server = context.socket()) {
+
                 context.http()
                         .parseRequest(json)
                         .eagerly()

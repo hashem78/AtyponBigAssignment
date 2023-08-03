@@ -22,22 +22,7 @@ public class MainMenuView implements View {
     @Override
     public void run(Context context) {
 
-        var authState = context.authService().getAuthState();
-        var user = context.authService().getUser();
-        List<MainMenuView.ViewProperties> viewProperties = switch (authState) {
-            case LoggedIn -> new ArrayList<>() {
-                {
-                    if(user.hasRole("admin"))
-                        add(new ViewProperties("get_users", "Get All Users"));
-                    add(new ViewProperties("logout", "Logout"));
-                }
-            };
-            case LoggedOut -> new ArrayList<>() {
-                {
-                    add(new ViewProperties("login", "Login"));
-                }
-            };
-        };
+        var viewProperties = getViewProperties(context);
 
         viewProperties.add(new MainMenuView.ViewProperties("exit", "Exit"));
 
@@ -53,5 +38,30 @@ public class MainMenuView implements View {
                 .callbackStore()
                 .get(viewProperties.get(userChoice).name)
                 .run(context);
+    }
+
+    private static List<ViewProperties> getViewProperties(Context context) {
+        var authState = context.authService().getAuthState();
+        var user = context.authService().getUser();
+        return switch (authState) {
+            case LoggedIn -> new ArrayList<>() {
+                {
+                    if(user.hasRole("admin"))
+                    {
+                        add(new ViewProperties("get_users", "Get All Users"));
+                        add(new ViewProperties("get_roles", "Get All Roles"));
+                        add(new ViewProperties("create_user", "Create a new User"));
+                        add(new ViewProperties("create_role", "Create a new Role"));
+                        add(new ViewProperties("assign_role_to_user", "Assign a role to a user"));
+                    }
+                    add(new ViewProperties("logout", "Logout"));
+                }
+            };
+            case LoggedOut -> new ArrayList<>() {
+                {
+                    add(new ViewProperties("login", "Login"));
+                }
+            };
+        };
     }
 }
