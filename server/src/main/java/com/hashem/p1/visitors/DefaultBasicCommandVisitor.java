@@ -83,6 +83,19 @@ public class DefaultBasicCommandVisitor implements BasicCommandVisitor {
     }
 
     @Override
+    public Response visit(UpdateRoleCommand command) {
+
+        try (var dao = new RoleDao()) {
+            var success = dao.updateRole(command.id(), command.newRoleName());
+            return new UpdateRoleCommandResponse(success);
+        } catch (RoleAlreadyExistsException e) {
+            return new UpdateRoleCommandResponse(false);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
     public Response visit(DeleteRoleCommand command) {
 
         try (var dao = new RoleDao()) {

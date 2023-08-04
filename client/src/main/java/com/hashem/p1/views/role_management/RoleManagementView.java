@@ -13,6 +13,7 @@ public class RoleManagementView implements View {
         var viewProperties = new ArrayList<ViewProperties>() {{
             add(new ViewProperties("get_roles", "Get All Roles"));
             add(new ViewProperties("create_role", "Create a new Role"));
+            add(new ViewProperties("update_role", "Update a Role"));
             add(new ViewProperties("delete_role", "Delete a Role"));
         }};
 

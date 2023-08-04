@@ -8,10 +8,7 @@ import com.hashem.p1.views.auth.ExitView;
 import com.hashem.p1.views.auth.LoginView;
 import com.hashem.p1.views.auth.LogoutView;
 import com.hashem.p1.views.core.ViewRegistry;
-import com.hashem.p1.views.role_management.CreateRoleView;
-import com.hashem.p1.views.role_management.DeleteRoleView;
-import com.hashem.p1.views.role_management.GetRolesView;
-import com.hashem.p1.views.role_management.RoleManagementView;
+import com.hashem.p1.views.role_management.*;
 import com.hashem.p1.views.user_management.*;
 import rawhttp.core.RawHttp;
 
@@ -32,6 +29,7 @@ public class Main {
                 .register("role_management", new RoleManagementView())
                 .register("create_user", new CreateUserView())
                 .register("create_role", new CreateRoleView())
+                .register("update_role", new UpdateRoleView())
                 .register("delete_role", new DeleteRoleView())
                 .register("user_management", new UserManagementView())
                 .register("update_user", new UpdateUsersView())
