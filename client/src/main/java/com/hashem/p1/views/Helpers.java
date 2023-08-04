@@ -1,5 +1,6 @@
 package com.hashem.p1.views;
 
+import com.hashem.p1.models.CClass;
 import com.hashem.p1.models.Role;
 import com.hashem.p1.models.User;
 import com.hashem.p1.views.core.ViewMapping;
@@ -46,6 +47,34 @@ public class Helpers {
 
         table.addRule();
         System.out.println(table.render());
+    }
+
+    public static void displayClass(CClass clazz) {
+
+        var table = new AsciiTable();
+
+        System.out.println("----- " + clazz.name() + "(" + clazz.id() + ")" + " -----");
+        table.addRule();
+        table.addRow("Id", "Email", "Roles");
+        table.addRule();
+        clazz.users().forEach(user -> {
+            var roles = user.roles().stream()
+                    .map(Role::name)
+                    .collect(Collectors.joining(", "));
+            table.addRow(user.id(), user.email(), roles);
+            table.addRule();
+        });
+
+        if (clazz.users().size() % 2 == 0)
+            table.addRule();
+
+        System.out.println(table.render());
+    }
+
+    public static void displayClasses(Set<CClass> classes) {
+        for (var clazz : classes) {
+            displayClass(clazz);
+        }
     }
 
 

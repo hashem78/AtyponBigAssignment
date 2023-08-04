@@ -1,8 +1,6 @@
 package com.hashem.p1.commands;
 
-import com.hashem.p1.commands.classes.AddUserToClassCommand;
-import com.hashem.p1.commands.classes.CreateClassCommand;
-import com.hashem.p1.commands.classes.RemoveUserFromClassCommand;
+import com.hashem.p1.commands.classes.*;
 import com.hashem.p1.commands.role.CreateRoleCommand;
 import com.hashem.p1.commands.role.DeleteRoleCommand;
 import com.hashem.p1.commands.role.UpdateRoleCommand;
@@ -18,7 +16,10 @@ public interface CommandVisitor {
     Response visit(DeleteUserCommand command);
     Response visit(UpdateRoleCommand command);
     Response visit(DeleteRoleCommand command);
-    Response visit(AddUserToClassCommand command);
     Response visit(CreateClassCommand command);
-    Response visit(RemoveUserFromClassCommand command);
+    Response visit(UpdateClassCommand command);
+    Response visit(DeleteClassCommand command);
+    Response visit(UpdateClassUsersAddCommand command);
+    Response visit(UpdateClassUsersRemoveCommand command);
+
 }

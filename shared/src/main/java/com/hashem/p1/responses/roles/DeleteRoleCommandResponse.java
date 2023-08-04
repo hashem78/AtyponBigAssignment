@@ -1,4 +1,4 @@
-package com.hashem.p1.responses.users;
+package com.hashem.p1.responses.roles;
 
 import com.hashem.p1.responses.Response;
 

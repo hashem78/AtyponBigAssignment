@@ -34,6 +34,7 @@ public class MainMenuView implements View {
                     {
                         add(new ViewProperties("role_management", "Manage Roles"));
                         add(new ViewProperties("user_management", "Manage Users"));
+                        add(new ViewProperties("class_management", "Manage Classes"));
                     }
                     add(new ViewProperties("logout", "Logout"));
                 }

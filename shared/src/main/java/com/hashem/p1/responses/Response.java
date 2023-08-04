@@ -3,12 +3,13 @@ package com.hashem.p1.responses;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.hashem.p1.responses.classes.GetClassesQueryResponse;
 import com.hashem.p1.responses.roles.CreateRoleCommandResponse;
 import com.hashem.p1.responses.roles.GetRolesQueryResponse;
-import com.hashem.p1.responses.roles.GetUsersQueryResponse;
+import com.hashem.p1.responses.users.GetUsersQueryResponse;
 import com.hashem.p1.responses.roles.UpdateRoleCommandResponse;
 import com.hashem.p1.responses.users.CreateUserCommandResponse;
-import com.hashem.p1.responses.users.DeleteRoleCommandResponse;
+import com.hashem.p1.responses.roles.DeleteRoleCommandResponse;
 import com.hashem.p1.responses.users.DeleteUserCommandResponse;
 import com.hashem.p1.responses.users.UpdateUserCommandResponse;
 
@@ -17,6 +18,7 @@ import com.hashem.p1.responses.users.UpdateUserCommandResponse;
         property = "type")
 @JsonSubTypes({
         @JsonSubTypes.Type(value = GetUsersQueryResponse.class, name = "get_users_response"),
+        @JsonSubTypes.Type(value = GetClassesQueryResponse.class, name = "get_classes_response"),
         @JsonSubTypes.Type(value = CreateUserCommandResponse.class, name = "create_user_response"),
         @JsonSubTypes.Type(value = UpdateUserCommandResponse.class, name = "update_user_response"),
         @JsonSubTypes.Type(value = DeleteUserCommandResponse.class, name = "delete_user_response"),

@@ -8,5 +8,5 @@ public interface QueryVisitor {
     Response visit(GetUsersQuery query);
     Response visit(GetRolesQuery query);
     Response visit(GetClassMembersQuery query);
-
+    Response visit(GetClassesQuery query);
 }

@@ -2,9 +2,7 @@ package com.hashem.p1.commands;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.hashem.p1.commands.classes.AddUserToClassCommand;
-import com.hashem.p1.commands.classes.CreateClassCommand;
-import com.hashem.p1.commands.classes.RemoveUserFromClassCommand;
+import com.hashem.p1.commands.classes.*;
 import com.hashem.p1.commands.role.CreateRoleCommand;
 import com.hashem.p1.commands.role.DeleteRoleCommand;
 import com.hashem.p1.commands.role.UpdateRoleCommand;
@@ -25,9 +23,11 @@ import com.hashem.p1.responses.Response;
         @JsonSubTypes.Type(value = DeleteUserCommand.class, name = "delete_user"),
         @JsonSubTypes.Type(value = UpdateRoleCommand.class, name = "update_role"),
         @JsonSubTypes.Type(value = DeleteRoleCommand.class, name = "delete_role"),
-        @JsonSubTypes.Type(value = RemoveUserFromClassCommand.class, name = "remove_user_from_class"),
-        @JsonSubTypes.Type(value = AddUserToClassCommand.class, name = "add_user_to_class"),
         @JsonSubTypes.Type(value = CreateClassCommand.class, name = "create_class"),
+        @JsonSubTypes.Type(value = UpdateClassCommand.class, name = "update_class"),
+        @JsonSubTypes.Type(value = DeleteClassCommand.class, name = "delete_class"),
+        @JsonSubTypes.Type(value = UpdateClassUsersAddCommand.class, name = "update_class_users_add"),
+        @JsonSubTypes.Type(value = UpdateClassUsersRemoveCommand.class, name = "update_class_users_remove")
 })
 public interface Command extends RootObject {
 

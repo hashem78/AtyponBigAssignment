@@ -7,6 +7,7 @@ import com.hashem.p1.views.*;
 import com.hashem.p1.views.auth.ExitView;
 import com.hashem.p1.views.auth.LoginView;
 import com.hashem.p1.views.auth.LogoutView;
+import com.hashem.p1.views.class_management.*;
 import com.hashem.p1.views.core.ViewRegistry;
 import com.hashem.p1.views.role_management.*;
 import com.hashem.p1.views.user_management.*;
@@ -39,6 +40,15 @@ public class Main {
                 .register("update_user_roles_add", new UpdateUserRolesAddView())
                 .register("update_user_roles_remove", new UpdateUserRolesRemoveView())
                 .register("delete_user", new DeleteUserView())
+                .register("create_class", new CreateClassView())
+                .register("class_management", new ClassManagementView())
+                .register("get_classes", new GetClassesView())
+                .register("update_class", new UpdateClassView())
+                .register("delete_class", new DeleteClassView())
+                .register("update_class_name", new UpdateClassNameView())
+                .register("update_class_users", new UpdateClassUsersView())
+                .register("update_class_users_add", new UpdateClassUsersAddView())
+                .register("update_class_users_remove", new UpdateClassUsersRemoveView())
                 .register("logout", new LogoutView())
                 .register("exit", new ExitView())
                 .create();

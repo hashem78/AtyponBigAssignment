@@ -4,7 +4,7 @@ import com.hashem.p1.HttpClient;
 import com.hashem.p1.commands.role.DeleteRoleCommand;
 import com.hashem.p1.context.Context;
 import com.hashem.p1.queries.GetRolesQuery;
-import com.hashem.p1.responses.users.DeleteRoleCommandResponse;
+import com.hashem.p1.responses.roles.DeleteRoleCommandResponse;
 import com.hashem.p1.responses.roles.GetRolesQueryResponse;
 import com.hashem.p1.views.Helpers;
 import com.hashem.p1.views.core.View;
