@@ -6,8 +6,8 @@ import com.hashem.p1.queries.BasicQueryVisitor;
 import com.hashem.p1.queries.GetClassMembersQuery;
 import com.hashem.p1.queries.GetRolesQuery;
 import com.hashem.p1.queries.GetUsersQuery;
-import com.hashem.p1.responses.GetRolesQueryResponse;
-import com.hashem.p1.responses.GetUsersQueryResponse;
+import com.hashem.p1.responses.roles.GetRolesQueryResponse;
+import com.hashem.p1.responses.roles.GetUsersQueryResponse;
 import com.hashem.p1.responses.Response;
 
 public class DefaultBasicQueryVisitor implements BasicQueryVisitor {

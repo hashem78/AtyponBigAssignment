@@ -3,6 +3,14 @@ package com.hashem.p1.responses;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.hashem.p1.responses.roles.CreateRoleCommandResponse;
+import com.hashem.p1.responses.roles.GetRolesQueryResponse;
+import com.hashem.p1.responses.roles.GetUsersQueryResponse;
+import com.hashem.p1.responses.roles.UpdateRoleCommandResponse;
+import com.hashem.p1.responses.users.CreateUserCommandResponse;
+import com.hashem.p1.responses.users.DeleteRoleCommandResponse;
+import com.hashem.p1.responses.users.DeleteUserCommandResponse;
+import com.hashem.p1.responses.users.UpdateUserCommandResponse;
 
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,

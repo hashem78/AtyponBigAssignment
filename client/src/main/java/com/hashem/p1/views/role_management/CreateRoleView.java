@@ -1,9 +1,9 @@
 package com.hashem.p1.views.role_management;
 
 import com.hashem.p1.HttpClient;
-import com.hashem.p1.commands.CreateRoleCommand;
+import com.hashem.p1.commands.role.CreateRoleCommand;
 import com.hashem.p1.context.Context;
-import com.hashem.p1.responses.CreateRoleCommandResponse;
+import com.hashem.p1.responses.roles.CreateRoleCommandResponse;
 import com.hashem.p1.views.core.View;
 import de.vandermeer.asciitable.AsciiTable;
 

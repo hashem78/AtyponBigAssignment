@@ -1,5 +1,7 @@
-package com.hashem.p1.commands;
+package com.hashem.p1.commands.classes;
 
+import com.hashem.p1.commands.BasicCommandVisitor;
+import com.hashem.p1.commands.Command;
 import com.hashem.p1.responses.Response;
 
 public class CreateClassCommand implements Command {

@@ -1,4 +1,6 @@
-package com.hashem.p1.responses;
+package com.hashem.p1.responses.roles;
+
+import com.hashem.p1.responses.Response;
 
 public record UpdateRoleCommandResponse(boolean success) implements Response {
 }

@@ -1,6 +1,7 @@
-package com.hashem.p1.responses;
+package com.hashem.p1.responses.roles;
 
 import com.hashem.p1.models.Role;
+import com.hashem.p1.responses.Response;
 
 import java.util.Set;
 

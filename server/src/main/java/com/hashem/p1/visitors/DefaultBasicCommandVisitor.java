@@ -2,7 +2,20 @@ package com.hashem.p1.visitors;
 
 import com.hashem.p1.*;
 import com.hashem.p1.commands.*;
+import com.hashem.p1.commands.classes.AddUserToClassCommand;
+import com.hashem.p1.commands.classes.CreateClassCommand;
+import com.hashem.p1.commands.classes.RemoveUserFromClassCommand;
+import com.hashem.p1.commands.role.CreateRoleCommand;
+import com.hashem.p1.commands.role.DeleteRoleCommand;
+import com.hashem.p1.commands.role.UpdateRoleCommand;
+import com.hashem.p1.commands.user.*;
 import com.hashem.p1.responses.*;
+import com.hashem.p1.responses.roles.CreateRoleCommandResponse;
+import com.hashem.p1.responses.roles.UpdateRoleCommandResponse;
+import com.hashem.p1.responses.users.CreateUserCommandResponse;
+import com.hashem.p1.responses.users.DeleteRoleCommandResponse;
+import com.hashem.p1.responses.users.DeleteUserCommandResponse;
+import com.hashem.p1.responses.users.UpdateUserCommandResponse;
 
 public class DefaultBasicCommandVisitor implements BasicCommandVisitor {
     @Override
