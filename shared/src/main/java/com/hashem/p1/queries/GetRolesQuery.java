@@ -1,8 +1,8 @@
 package com.hashem.p1.queries;
 
-import com.hashem.p1.Response;
+import com.hashem.p1.responses.Response;
 
-public class GetRolesQuery extends BasicQuery {
+public record GetRolesQuery() implements Query {
     @Override
     public Response accept(BasicQueryVisitor visitor) {
         return visitor.visit(this);

@@ -34,8 +34,8 @@ public class UserDao implements AutoCloseable {
         var sqlQuery = """
                 SELECT u.id as user_id, u.email, u.password, r.id as role_id, r.name as role_name
                 FROM Users u
-                         JOIN UserRoles ur ON u.id = ur.user_id
-                         JOIN Roles r ON ur.role_id = r.id""";
+                         LEFT JOIN UserRoles ur ON u.id = ur.user_id
+                         LEFT JOIN Roles r ON ur.role_id = r.id""";
 
         var resultSet = db
                 .prepareStatement(sqlQuery)
@@ -57,11 +57,11 @@ public class UserDao implements AutoCloseable {
             if (!userMapRoles.containsKey(userId)) {
                 userMapRoles.put(userId, new ArrayList<>());
             }
-            userMapRoles.get(userId).add(
-                    Role.builder()
-                            .id(resultSet.getInt("role_id"))
-                            .name(resultSet.getString("role_name"))
-                            .build());
+            var roleId = resultSet.getInt("role_id");
+            var roleName = resultSet.getString("role_name");
+
+            if (roleId != 0 && roleName != null)
+                userMapRoles.get(userId).add(new Role(roleId, roleName));
         }
         var users = new HashSet<User>();
         for (Integer userId : userMap.keySet()) {

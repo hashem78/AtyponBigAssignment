@@ -1,8 +1,8 @@
 package com.hashem.p1.commands;
 
-import com.hashem.p1.Response;
+import com.hashem.p1.responses.Response;
 
-public record CreateRoleCommand(String roleName) implements BasicCommand {
+public record CreateRoleCommand(String roleName) implements Command {
     @Override
     public Response accept(BasicCommandVisitor visitor) {
         return visitor.visit(this);

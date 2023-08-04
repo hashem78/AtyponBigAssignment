@@ -4,6 +4,7 @@ import com.hashem.p1.*;
 import com.hashem.p1.commands.*;
 import com.hashem.p1.responses.CreateRoleCommandResponse;
 import com.hashem.p1.responses.CreateUserCommandResponse;
+import com.hashem.p1.responses.Response;
 
 public class DefaultBasicCommandVisitor implements BasicCommandVisitor {
     @Override

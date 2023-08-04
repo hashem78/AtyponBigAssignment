@@ -2,10 +2,9 @@ package com.hashem.p1.queries;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.hashem.p1.Query;
-import com.hashem.p1.Response;
-import com.hashem.p1.helpers.BasicObject;
+import com.hashem.p1.helpers.RootObject;
 import com.hashem.p1.helpers.BasicObjectVisitor;
+import com.hashem.p1.responses.Response;
 
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
@@ -15,14 +14,12 @@ import com.hashem.p1.helpers.BasicObjectVisitor;
         @JsonSubTypes.Type(value = GetRolesQuery.class, name = "get_roles"),
         @JsonSubTypes.Type(value = GetClassMembersQuery.class, name = "get_class_members"),
 })
-public abstract class BasicQuery implements Query, BasicObject {
-    public BasicQuery() {
-    }
+public interface Query extends RootObject {
 
     @Override
-    public Response accept(BasicObjectVisitor visitor) {
+    default Response accept(BasicObjectVisitor visitor) {
         return visitor.visit(this);
     }
 
-    public abstract Response accept(BasicQueryVisitor visitor);
+    Response accept(BasicQueryVisitor visitor);
 }

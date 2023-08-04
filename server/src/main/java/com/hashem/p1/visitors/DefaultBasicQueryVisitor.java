@@ -1,6 +1,5 @@
 package com.hashem.p1.visitors;
 
-import com.hashem.p1.Response;
 import com.hashem.p1.RoleDao;
 import com.hashem.p1.UserDao;
 import com.hashem.p1.queries.BasicQueryVisitor;
@@ -9,6 +8,7 @@ import com.hashem.p1.queries.GetRolesQuery;
 import com.hashem.p1.queries.GetUsersQuery;
 import com.hashem.p1.responses.GetRolesQueryResponse;
 import com.hashem.p1.responses.GetUsersQueryResponse;
+import com.hashem.p1.responses.Response;
 
 public class DefaultBasicQueryVisitor implements BasicQueryVisitor {
 

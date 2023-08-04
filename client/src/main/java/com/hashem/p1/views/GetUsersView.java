@@ -4,7 +4,6 @@ import com.hashem.p1.HttpClient;
 import com.hashem.p1.context.Context;
 import com.hashem.p1.models.Role;
 import com.hashem.p1.queries.GetUsersQuery;
-import com.hashem.p1.responses.ErrorResponse;
 import com.hashem.p1.responses.GetUsersQueryResponse;
 import de.vandermeer.asciitable.AsciiTable;
 

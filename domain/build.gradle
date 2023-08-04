@@ -11,7 +11,6 @@ repositories {
 }
 
 dependencies {
-    implementation project(path: ':cqrs')
     implementation 'com.athaydes.rawhttp:rawhttp-core:2.5.2'
     testImplementation platform('org.junit:junit-bom:5.9.1')
     testImplementation 'org.junit.jupiter:junit-jupiter'

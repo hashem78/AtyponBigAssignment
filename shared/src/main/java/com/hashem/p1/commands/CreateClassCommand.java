@@ -1,8 +1,8 @@
 package com.hashem.p1.commands;
 
-import com.hashem.p1.Response;
+import com.hashem.p1.responses.Response;
 
-public class CreateClassCommand implements BasicCommand {
+public class CreateClassCommand implements Command {
     @Override
     public Response accept(BasicCommandVisitor visitor) {
 

@@ -31,6 +31,7 @@ public class CreateRoleView implements View {
         table.addRow("Id", "Name");
         table.addRule();
         table.addRow(response.id(), roleName);
+        table.addRule();
 
         System.out.println(table.render());
     }

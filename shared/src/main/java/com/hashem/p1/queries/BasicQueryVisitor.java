@@ -1,6 +1,7 @@
 package com.hashem.p1.queries;
 
-import com.hashem.p1.Response;
+
+import com.hashem.p1.responses.Response;
 
 public interface BasicQueryVisitor {
 

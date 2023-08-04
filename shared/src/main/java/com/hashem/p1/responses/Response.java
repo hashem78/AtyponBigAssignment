@@ -3,7 +3,6 @@ package com.hashem.p1.responses;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.hashem.p1.Response;
 
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
@@ -15,5 +14,5 @@ import com.hashem.p1.Response;
         @JsonSubTypes.Type(value = GetRolesQueryResponse.class, name = "get_roles_response"),
         @JsonSubTypes.Type(value = ErrorResponse.class, name = "error_response")
 })
-public interface BasicResponse extends Response {
+public interface Response {
 }

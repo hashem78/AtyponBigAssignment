@@ -2,10 +2,9 @@ package com.hashem.p1.commands;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.hashem.p1.Command;
-import com.hashem.p1.Response;
-import com.hashem.p1.helpers.BasicObject;
+import com.hashem.p1.helpers.RootObject;
 import com.hashem.p1.helpers.BasicObjectVisitor;
+import com.hashem.p1.responses.Response;
 
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
@@ -18,7 +17,7 @@ import com.hashem.p1.helpers.BasicObjectVisitor;
         @JsonSubTypes.Type(value = RemoveUserCommand.class, name = "remove_user"),
         @JsonSubTypes.Type(value = RemoveUserFromClassCommand.class, name = "remove_user_from_class"),
 })
-public interface BasicCommand extends Command, BasicObject {
+public interface Command extends RootObject {
 
     @Override
     default Response accept(BasicObjectVisitor visitor) {

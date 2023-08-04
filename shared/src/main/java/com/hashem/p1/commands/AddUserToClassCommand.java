@@ -1,8 +1,7 @@
 package com.hashem.p1.commands;
+import com.hashem.p1.responses.Response;
 
-import com.hashem.p1.Response;
-
-public class AddUserToClassCommand implements BasicCommand {
+public class AddUserToClassCommand implements Command {
     @Override
     public Response accept(BasicCommandVisitor visitor) {
         return visitor.visit(this);

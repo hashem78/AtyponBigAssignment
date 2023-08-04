@@ -1,8 +1,9 @@
 package com.hashem.p1;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hashem.p1.helpers.BasicObject;
+import com.hashem.p1.helpers.RootObject;
 import com.hashem.p1.helpers.HttpRequestBuilder;
+import com.hashem.p1.responses.Response;
 import rawhttp.core.RawHttp;
 import rawhttp.core.body.EagerBodyReader;
 
@@ -11,7 +12,7 @@ import java.net.Socket;
 
 public class HttpClient {
 
-    public static <T extends Response, U extends BasicObject> T sendRequest(Class<T> clazz, U obj, Socket serverSocket) {
+    public static <T extends Response, U extends RootObject> T sendRequest(Class<T> clazz, U obj, Socket serverSocket) {
 
         var objectMapper = new ObjectMapper();
         var http = new RawHttp();

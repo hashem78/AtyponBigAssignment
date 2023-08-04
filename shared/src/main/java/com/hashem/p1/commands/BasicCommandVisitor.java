@@ -1,5 +1,6 @@
 package com.hashem.p1.commands;
-import com.hashem.p1.Response;
+
+import com.hashem.p1.responses.Response;
 
 public interface BasicCommandVisitor {
     Response visit(CreateUserCommand command);
