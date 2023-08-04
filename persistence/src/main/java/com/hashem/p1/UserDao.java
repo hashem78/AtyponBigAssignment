@@ -72,7 +72,9 @@ public class UserDao implements AutoCloseable {
         return users;
     }
 
-    boolean insertUser(String email, String password, List<Role> roles) throws SQLException {
+    public int createUser(String email, String password, List<Role> roles) throws SQLException, UserAlreadyExistsException {
+
+        if (userExists(email)) throw new UserAlreadyExistsException();
 
         db.setAutoCommit(false);
         var success = true;
@@ -99,7 +101,7 @@ public class UserDao implements AutoCloseable {
         }
         db.commit();
         db.setAutoCommit(true);
-        return success;
+        return user_id;
     }
 
     boolean update(int user_id, String field, Object value) throws SQLException {
@@ -136,6 +138,19 @@ public class UserDao implements AutoCloseable {
 
         var preparedStatement = db.prepareStatement(userExistsQuery);
         preparedStatement.setInt(1, id);
+        var resultSet = preparedStatement.executeQuery();
+
+        if (resultSet.next()) {
+            return resultSet.getBoolean(1);
+        }
+        return false;
+    }
+
+    boolean userExists(String email) throws SQLException {
+        String userExistsQuery = "SELECT EXISTS(SELECT 1 FROM Users WHERE email = ?)";
+
+        var preparedStatement = db.prepareStatement(userExistsQuery);
+        preparedStatement.setString(1, email);
         var resultSet = preparedStatement.executeQuery();
 
         if (resultSet.next()) {

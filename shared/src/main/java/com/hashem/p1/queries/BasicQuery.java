@@ -11,8 +11,9 @@ import com.hashem.p1.helpers.BasicObjectVisitor;
         use = JsonTypeInfo.Id.NAME,
         property = "type")
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = GetClassMembersQuery.class, name = "get_class_members"),
         @JsonSubTypes.Type(value = GetUsersQuery.class, name = "get_users"),
+        @JsonSubTypes.Type(value = GetRolesQuery.class, name = "get_roles"),
+        @JsonSubTypes.Type(value = GetClassMembersQuery.class, name = "get_class_members"),
 })
 public abstract class BasicQuery implements Query, BasicObject {
     public BasicQuery() {

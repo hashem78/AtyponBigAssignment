@@ -4,6 +4,7 @@ import com.hashem.p1.models.Role;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -33,25 +34,65 @@ public class RoleDao implements AutoCloseable {
         return roles;
     }
 
-    public boolean createRole(String roleName) throws SQLException {
-        var sqlQuery = "insert into Roles (id,name) value (default, ?)";
-        var statement = db.prepareStatement(sqlQuery);
-        statement.setString(1, roleName);
+    public int createRole(String roleName) throws SQLException, RoleAlreadyExistsException {
 
-        return statement.executeUpdate() > 0;
+        if (roleExists(roleName)) throw new RoleAlreadyExistsException();
+
+        var sqlQuery = "insert into Roles (id,name) value (default, ?)";
+        var statement = db.prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS);
+        statement.setString(1, roleName);
+        statement.executeUpdate();
+
+        var generatedKeys = statement.getGeneratedKeys();
+
+        if (!generatedKeys.next())
+            throw new SQLException("Creating user failed, no ID obtained.");
+
+        return generatedKeys.getInt(1);
     }
 
-    public boolean updateRole(int roleId, String newRoleName) throws SQLException {
+    boolean roleExists(String name) throws SQLException {
+        String roleExistsQuery = "SELECT EXISTS(SELECT 1 FROM Roles WHERE name = ?)";
+
+        var preparedStatement = db.prepareStatement(roleExistsQuery);
+        preparedStatement.setString(1, name);
+        var resultSet = preparedStatement.executeQuery();
+
+        if (resultSet.next()) {
+            return resultSet.getBoolean(1);
+        }
+        return false;
+    }
+
+    boolean roleExists(int id) throws SQLException {
+        String roleExistsQuery = "SELECT EXISTS(SELECT 1 FROM Roles WHERE id = ?)";
+
+        var preparedStatement = db.prepareStatement(roleExistsQuery);
+        preparedStatement.setInt(1, id);
+        var resultSet = preparedStatement.executeQuery();
+
+        if (resultSet.next()) {
+            return resultSet.getBoolean(1);
+        }
+        return false;
+    }
+
+    public boolean updateRole(int id, String newRoleName) throws SQLException, RoleDoesNotExistException {
+
+        if (!roleExists(id)) throw new RoleDoesNotExistException();
 
         var sqlQuery = "update Roles set name = ? where id = ?";
         var statement = db.prepareStatement(sqlQuery);
         statement.setString(1, newRoleName);
-        statement.setInt(2, roleId);
+        statement.setInt(2, id);
 
         return statement.executeUpdate() > 0;
     }
 
-    public boolean deleteRole(String roleName) throws SQLException {
+    public boolean deleteRole(String roleName) throws SQLException, RoleDoesNotExistException {
+
+        if (!roleExists(roleName)) throw new RoleDoesNotExistException();
+
         var sqlQuery = "delete from Roles where name = ?";
         var statement = db.prepareStatement(sqlQuery);
         statement.setString(1, roleName);
@@ -59,7 +100,9 @@ public class RoleDao implements AutoCloseable {
         return statement.executeUpdate() > 0;
     }
 
-    public boolean deleteRole(int id) throws SQLException {
+    public boolean deleteRole(int id) throws SQLException, RoleDoesNotExistException {
+
+        if (!roleExists(id)) throw new RoleDoesNotExistException();
 
         var sqlQuery = "delete from Roles where id = ?";
         var statement = db.prepareStatement(sqlQuery);
@@ -69,13 +112,14 @@ public class RoleDao implements AutoCloseable {
     }
 
     public Role getRole(int id) throws SQLException, RoleDoesNotExistException {
+
+        if (!roleExists(id)) throw new RoleDoesNotExistException();
+
         var sqlQuery = "select name from Roles where id = ?";
         var statement = db.prepareStatement(sqlQuery);
         statement.setInt(1, id);
 
         var resultSet = statement.executeQuery();
-        if (!resultSet.next())
-            throw new RoleDoesNotExistException();
 
         return Role.builder()
                 .id(id)
@@ -83,7 +127,10 @@ public class RoleDao implements AutoCloseable {
                 .build();
     }
 
-    public List<Integer> getAllUsersForRole(int roleId) throws SQLException {
+    public List<Integer> getAllUsersForRole(int id) throws SQLException, RoleDoesNotExistException {
+
+        if (!roleExists(id)) throw new RoleDoesNotExistException();
+
         var sqlQuery = """
                 SELECT Users.id
                 FROM UserRoles

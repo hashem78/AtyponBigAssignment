@@ -20,6 +20,9 @@ public class Main {
                 .register("main_menu", new MainMenuView())
                 .register("login", new LoginView())
                 .register("get_users", new GetUsersView())
+                .register("get_roles", new GetRolesView())
+                .register("create_user", new CreateUserView())
+                .register("create_role", new CreateRoleView())
                 .register("logout", new LogoutView())
                 .register("exit", new ExitView())
                 .create();

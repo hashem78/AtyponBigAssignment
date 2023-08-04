@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id "io.freefair.lombok" version "8.1.0"
 }
 
 group = 'com.hashem.p1'
@@ -12,6 +13,7 @@ repositories {
 dependencies {
     implementation project(path: ':cqrs')
     implementation project(path: ':domain')
+    implementation 'org.projectlombok:lombok:1.18.26'
     testImplementation platform('org.junit:junit-bom:5.9.1')
     testImplementation 'org.junit.jupiter:junit-jupiter'
 }
