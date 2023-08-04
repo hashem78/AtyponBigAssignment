@@ -1,14 +1,16 @@
-package com.hashem.p1.views;
+package com.hashem.p1.views.user_management;
 
 import com.hashem.p1.HttpClient;
 import com.hashem.p1.commands.UpdateUserCommand;
 import com.hashem.p1.context.Context;
 import com.hashem.p1.models.User;
 import com.hashem.p1.responses.UpdateUserCommandResponse;
+import com.hashem.p1.views.Helpers;
+import com.hashem.p1.views.core.View;
 
 import java.util.Scanner;
 
-public class UpdateUserPasswordView implements View {
+public class UpdateUserEmailView implements View {
     @Override
     public void run(Context context) {
 
@@ -18,12 +20,12 @@ public class UpdateUserPasswordView implements View {
         var scanner = new Scanner(System.in);
         Helpers.displayUser(user);
 
-        System.out.print("Enter new password: ");
-        var password = scanner.next();
+        System.out.print("Enter new email: ");
+        var email = scanner.next();
 
         var response = HttpClient.sendRequest(
                 UpdateUserCommandResponse.class,
-                new UpdateUserCommand(user.withPassword(password)));
+                new UpdateUserCommand(user.withEmail(email)));
 
         if (response.success())
             System.out.println("Update Successful");

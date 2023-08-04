@@ -1,6 +1,8 @@
 package com.hashem.p1.views;
 
 import com.hashem.p1.context.Context;
+import com.hashem.p1.views.core.View;
+import com.hashem.p1.views.core.ViewProperties;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,11 +32,8 @@ public class MainMenuView implements View {
                 {
                     if(user.hasRole("admin"))
                     {
-                        add(new ViewProperties("get_users", "Get All Users"));
-                        add(new ViewProperties("get_roles", "Get All Roles"));
-                        add(new ViewProperties("create_user", "Create a new User"));
-                        add(new ViewProperties("create_role", "Create a new Role"));
-                        add(new ViewProperties("update_user", "Update a user"));
+                        add(new ViewProperties("role_management", "Manage Roles"));
+                        add(new ViewProperties("user_management", "Manage Users"));
                     }
                     add(new ViewProperties("logout", "Logout"));
                 }

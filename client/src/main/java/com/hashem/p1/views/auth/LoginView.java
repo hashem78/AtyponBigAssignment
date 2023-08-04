@@ -1,11 +1,10 @@
-package com.hashem.p1.views;
+package com.hashem.p1.views.auth;
 
 import com.hashem.p1.UserDoesNotExistException;
-import com.hashem.p1.auth.AuthException;
 import com.hashem.p1.context.Context;
+import com.hashem.p1.views.core.View;
 
 import java.sql.SQLException;
-import java.util.Scanner;
 
 public class LoginView implements View {
 

@@ -1,9 +1,10 @@
-package com.hashem.p1.views;
+package com.hashem.p1.views.user_management;
 
 import com.hashem.p1.HttpClient;
 import com.hashem.p1.commands.CreateUserCommand;
 import com.hashem.p1.context.Context;
 import com.hashem.p1.responses.CreateUserCommandResponse;
+import com.hashem.p1.views.core.View;
 import de.vandermeer.asciitable.AsciiTable;
 
 import java.util.ArrayList;

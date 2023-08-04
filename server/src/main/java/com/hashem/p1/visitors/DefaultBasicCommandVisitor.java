@@ -83,6 +83,19 @@ public class DefaultBasicCommandVisitor implements BasicCommandVisitor {
     }
 
     @Override
+    public Response visit(DeleteRoleCommand command) {
+
+        try (var dao = new RoleDao()) {
+            var success = dao.deleteRole(command.id());
+            return new DeleteRoleCommandResponse(success);
+        } catch (UserAlreadyExistsException e) {
+            return new DeleteRoleCommandResponse(false);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
     public Response visit(AddUserToClassCommand command) {
         return null;
     }

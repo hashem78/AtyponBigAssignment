@@ -1,15 +1,18 @@
-package com.hashem.p1.views;
+package com.hashem.p1.views.user_management;
 
 import com.hashem.p1.HttpClient;
 import com.hashem.p1.context.Context;
 import com.hashem.p1.queries.GetUsersQuery;
 import com.hashem.p1.responses.GetUsersQueryResponse;
+import com.hashem.p1.views.Helpers;
+import com.hashem.p1.views.core.View;
+import com.hashem.p1.views.core.ViewProperties;
 
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Scanner;
 
-public class UpdateUserView implements View {
+public class UpdateUsersView implements View {
     @Override
     public void run(Context context) {
 
@@ -17,10 +20,12 @@ public class UpdateUserView implements View {
                 GetUsersQueryResponse.class,
                 new GetUsersQuery());
 
+        var scanner = new Scanner(System.in);
+
         Helpers.displayUsers(usersResponse.users());
 
-        var scanner = new Scanner(System.in);
-        System.out.print("Enter Id of User you want to update: ");
+        System.out.print("Enter user id to update: ");
+
         var id = scanner.nextInt();
 
         var userOptional = usersResponse.users()
@@ -46,5 +51,6 @@ public class UpdateUserView implements View {
                 .callbackStore()
                 .get(viewProperties.get(userChoice).name())
                 .run(context.withViewBag(Optional.of(userOptional.get())));
+
     }
 }

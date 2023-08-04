@@ -2,6 +2,8 @@ package com.hashem.p1.views;
 
 import com.hashem.p1.models.Role;
 import com.hashem.p1.models.User;
+import com.hashem.p1.views.core.ViewMapping;
+import com.hashem.p1.views.core.ViewProperties;
 import de.vandermeer.asciitable.AsciiTable;
 
 import java.util.List;

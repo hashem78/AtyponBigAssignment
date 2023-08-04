@@ -1,4 +1,4 @@
-package com.hashem.p1.views;
+package com.hashem.p1.views.core;
 
 import com.hashem.p1.context.Context;
 
