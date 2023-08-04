@@ -5,6 +5,8 @@ import com.hashem.p1.models.Role;
 import com.hashem.p1.models.User;
 
 import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -58,6 +60,50 @@ public class ClassDao implements AutoCloseable {
             classesMap.put(classId, clazz);
         }
         return new HashSet<>(classesMap.values());
+    }
+
+    public int create(String name) throws SQLException, ClassAlreadyExistsException {
+
+        if (classExists(name)) throw new ClassAlreadyExistsException();
+
+        var sqlQuery = "insert into Classes (id,name) value (default, ?)";
+        var statement = db.prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS);
+        statement.setString(1, name);
+        statement.executeUpdate();
+
+        var generatedKeys = statement.getGeneratedKeys();
+
+        if (!generatedKeys.next())
+            throw new SQLException("Creating class failed, no ID obtained.");
+
+        return generatedKeys.getInt(1);
+    }
+
+
+    boolean classExists(String name) throws SQLException {
+        String classExistsQuery = "SELECT EXISTS(SELECT 1 FROM Classes WHERE name = ?)";
+
+        var preparedStatement = db.prepareStatement(classExistsQuery);
+        preparedStatement.setString(1, name);
+        var resultSet = preparedStatement.executeQuery();
+
+        if (resultSet.next()) {
+            return resultSet.getBoolean(1);
+        }
+        return false;
+    }
+
+    boolean classExists(int id) throws SQLException {
+        String classExistsQuery = "SELECT EXISTS(SELECT 1 FROM Classes WHERE id = ?)";
+
+        var preparedStatement = db.prepareStatement(classExistsQuery);
+        preparedStatement.setInt(1, id);
+        var resultSet = preparedStatement.executeQuery();
+
+        if (resultSet.next()) {
+            return resultSet.getBoolean(1);
+        }
+        return false;
     }
 
     @Override

@@ -8,6 +8,7 @@ import com.hashem.p1.commands.role.DeleteRoleCommand;
 import com.hashem.p1.commands.role.UpdateRoleCommand;
 import com.hashem.p1.commands.user.*;
 import com.hashem.p1.responses.*;
+import com.hashem.p1.responses.classes.CreateClassCommandResponse;
 import com.hashem.p1.responses.roles.CreateRoleCommandResponse;
 import com.hashem.p1.responses.roles.UpdateRoleCommandResponse;
 import com.hashem.p1.responses.users.CreateUserCommandResponse;
@@ -121,7 +122,12 @@ public class DefaultCommandVisitor implements CommandVisitor {
 
     @Override
     public Response visit(CreateClassCommand command) {
-        return null;
+        try (var dao = new ClassDao()) {
+            var id = dao.create(command.name());
+            return new CreateClassCommandResponse(id);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
