@@ -14,5 +14,5 @@ import com.hashem.p1.responses.Response;
         @JsonSubTypes.Type(value = Command.class, name = "command"),
 })
 public interface RootObject {
-    Response accept(BasicObjectVisitor visitor);
+    Response accept(RootObjectVisitor visitor);
 }

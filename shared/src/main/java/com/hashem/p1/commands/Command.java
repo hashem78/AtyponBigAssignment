@@ -10,7 +10,7 @@ import com.hashem.p1.commands.role.DeleteRoleCommand;
 import com.hashem.p1.commands.role.UpdateRoleCommand;
 import com.hashem.p1.commands.user.*;
 import com.hashem.p1.helpers.RootObject;
-import com.hashem.p1.helpers.BasicObjectVisitor;
+import com.hashem.p1.helpers.RootObjectVisitor;
 import com.hashem.p1.responses.Response;
 
 @JsonTypeInfo(
@@ -32,9 +32,9 @@ import com.hashem.p1.responses.Response;
 public interface Command extends RootObject {
 
     @Override
-    default Response accept(BasicObjectVisitor visitor) {
+    default Response accept(RootObjectVisitor visitor) {
         return visitor.visit(this);
     }
 
-    Response accept(BasicCommandVisitor visitor);
+    Response accept(CommandVisitor visitor);
 }

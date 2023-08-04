@@ -2,7 +2,7 @@ package com.hashem.p1.visitors;
 
 import com.hashem.p1.RoleDao;
 import com.hashem.p1.UserDao;
-import com.hashem.p1.queries.BasicQueryVisitor;
+import com.hashem.p1.queries.QueryVisitor;
 import com.hashem.p1.queries.GetClassMembersQuery;
 import com.hashem.p1.queries.GetRolesQuery;
 import com.hashem.p1.queries.GetUsersQuery;
@@ -10,7 +10,7 @@ import com.hashem.p1.responses.roles.GetRolesQueryResponse;
 import com.hashem.p1.responses.roles.GetUsersQueryResponse;
 import com.hashem.p1.responses.Response;
 
-public class DefaultBasicQueryVisitor implements BasicQueryVisitor {
+public class DefaultQueryVisitor implements QueryVisitor {
 
     @Override
     public Response visit(GetUsersQuery query) {

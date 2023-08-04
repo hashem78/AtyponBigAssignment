@@ -3,7 +3,7 @@ package com.hashem.p1;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hashem.p1.helpers.RootObject;
-import com.hashem.p1.visitors.DefaultBasicObjectVisitor;
+import com.hashem.p1.visitors.DefaultRootObjectVisitor;
 import com.hashem.p1.helpers.HttpResponseBuilder;
 import rawhttp.core.RawHttp;
 
@@ -71,7 +71,7 @@ class ClientTask implements Runnable {
                     var body = bodyReader.toString();
                     var basicObject = objectMapper.readValue(body, RootObject.class);
                     System.out.println(basicObject);
-                    var visitor = new DefaultBasicObjectVisitor();
+                    var visitor = new DefaultRootObjectVisitor();
                     var response = basicObject.accept(visitor);
                     if (response == null)
                         return;

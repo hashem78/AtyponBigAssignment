@@ -9,7 +9,7 @@ import com.hashem.p1.commands.role.UpdateRoleCommand;
 import com.hashem.p1.commands.user.*;
 import com.hashem.p1.responses.Response;
 
-public interface BasicCommandVisitor {
+public interface CommandVisitor {
     Response visit(CreateUserCommand command);
     Response visit(CreateRoleCommand command);
     Response visit(UpdateUserCommand command);

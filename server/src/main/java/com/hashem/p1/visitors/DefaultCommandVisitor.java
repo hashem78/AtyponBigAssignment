@@ -17,7 +17,7 @@ import com.hashem.p1.responses.users.DeleteRoleCommandResponse;
 import com.hashem.p1.responses.users.DeleteUserCommandResponse;
 import com.hashem.p1.responses.users.UpdateUserCommandResponse;
 
-public class DefaultBasicCommandVisitor implements BasicCommandVisitor {
+public class DefaultCommandVisitor implements CommandVisitor {
     @Override
     public Response visit(CreateUserCommand command) {
 
