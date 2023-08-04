@@ -54,9 +54,12 @@ public class ClassDao implements AutoCloseable {
                 var userEmail = resultSet.getString("email");
 
                 var user = usersMap.getOrDefault(userId, new User(userId, userEmail, "", new HashSet<>()));
-                user.roles().add(new Role(resultSet.getInt("role_id"), resultSet.getString("role_name")));
-                usersMap.put(userId, user);
+                var roleId = resultSet.getInt("role_id");
+                var roleName = resultSet.getString("role_name");
+                if (roleId != 0)
+                    user.roles().add(new Role(roleId, roleName));
 
+                usersMap.put(userId, user);
                 clazz.users().add(user);
             }
 

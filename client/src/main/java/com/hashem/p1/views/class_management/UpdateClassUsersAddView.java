@@ -2,7 +2,6 @@ package com.hashem.p1.views.class_management;
 
 import com.hashem.p1.HttpClient;
 import com.hashem.p1.commands.classes.UpdateClassUsersAddCommand;
-import com.hashem.p1.commands.user.UpdateUserRolesAddCommand;
 import com.hashem.p1.context.Context;
 import com.hashem.p1.models.CClass;
 import com.hashem.p1.queries.GetUsersQuery;

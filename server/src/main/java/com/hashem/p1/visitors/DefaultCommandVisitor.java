@@ -9,6 +9,7 @@ import com.hashem.p1.commands.role.UpdateRoleCommand;
 import com.hashem.p1.commands.user.*;
 import com.hashem.p1.responses.*;
 import com.hashem.p1.responses.classes.CreateClassCommandResponse;
+import com.hashem.p1.responses.classes.DeleteClassCommandResponse;
 import com.hashem.p1.responses.classes.UpdateClassCommandResponse;
 import com.hashem.p1.responses.roles.CreateRoleCommandResponse;
 import com.hashem.p1.responses.roles.UpdateRoleCommandResponse;
@@ -16,6 +17,8 @@ import com.hashem.p1.responses.users.CreateUserCommandResponse;
 import com.hashem.p1.responses.roles.DeleteRoleCommandResponse;
 import com.hashem.p1.responses.users.DeleteUserCommandResponse;
 import com.hashem.p1.responses.users.UpdateUserCommandResponse;
+
+import java.sql.SQLException;
 
 public class DefaultCommandVisitor implements CommandVisitor {
     @Override
@@ -114,7 +117,7 @@ public class DefaultCommandVisitor implements CommandVisitor {
         try (var dao = new RoleDao()) {
             var success = dao.deleteRole(command.id());
             return new DeleteRoleCommandResponse(success);
-        } catch (UserAlreadyExistsException e) {
+        } catch (RoleDoesNotExistException e) {
             return new DeleteRoleCommandResponse(false);
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -126,6 +129,8 @@ public class DefaultCommandVisitor implements CommandVisitor {
         try (var dao = new ClassDao()) {
             var id = dao.create(command.name());
             return new CreateClassCommandResponse(id);
+        } catch (ClassAlreadyExistsException e) {
+            return new CreateClassCommandResponse(-1);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -135,7 +140,9 @@ public class DefaultCommandVisitor implements CommandVisitor {
     public Response visit(UpdateClassCommand command) {
         try (var dao = new ClassDao()) {
             var success = dao.update(command.id(), command.name());
-            return new DeleteRoleCommandResponse(success);
+            return new UpdateClassCommandResponse(success);
+        } catch (ClassDoesNotExistException e) {
+            return new UpdateClassCommandResponse(false);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -145,7 +152,9 @@ public class DefaultCommandVisitor implements CommandVisitor {
     public Response visit(DeleteClassCommand command) {
         try (var dao = new ClassDao()) {
             var success = dao.delete(command.id());
-            return new UpdateClassCommandResponse(success);
+            return new DeleteClassCommandResponse(success);
+        } catch (ClassDoesNotExistException e) {
+            return new DeleteClassCommandResponse(false);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -153,11 +162,25 @@ public class DefaultCommandVisitor implements CommandVisitor {
 
     @Override
     public Response visit(UpdateClassUsersAddCommand command) {
-        return null;
+        try (var dao = new UserDao()) {
+            var success = dao.addUserToClass(command.classId(), command.userId());
+            return new UpdateClassCommandResponse(success);
+        } catch (RelationshipDoesNotExist | ClassDoesNotExistException e) {
+            return new DeleteClassCommandResponse(false);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public Response visit(UpdateClassUsersRemoveCommand command) {
-        return null;
+        try (var dao = new UserDao()) {
+            var success = dao.removeUserFromClass(command.classId(), command.userId());
+            return new UpdateClassCommandResponse(success);
+        } catch (RelationshipDoesNotExist | ClassDoesNotExistException e) {
+            return new UpdateClassCommandResponse(false);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

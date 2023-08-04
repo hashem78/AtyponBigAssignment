@@ -40,7 +40,7 @@ public class UpdateClassView implements View {
 
         var viewProperties = new ArrayList<ViewProperties>() {{
             add(new ViewProperties("update_class_name", "Update the Class's name"));
-            add(new ViewProperties("update_class_users", "Update the Class's roles"));
+            add(new ViewProperties("update_class_users", "Update the Class's users"));
             add(new ViewProperties("delete_class", "Delete the class"));
         }};
 

@@ -5,7 +5,6 @@ import com.hashem.p1.models.User;
 
 import java.sql.*;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class UserDao implements AutoCloseable {
 
@@ -120,7 +119,7 @@ public class UserDao implements AutoCloseable {
 
     public boolean deleteUser(int id) throws SQLException, UserDoesNotExistException {
 
-        if(!userExists(id)) throw new UserDoesNotExistException();
+        if (!userExists(id)) throw new UserDoesNotExistException();
 
         var query = "delete from Users where id = ?";
         var statement = db.prepareStatement(query);
@@ -210,6 +209,46 @@ public class UserDao implements AutoCloseable {
         return userBuilder
                 .roles(new HashSet<>(roleMap.values()))
                 .build();
+    }
+
+    public boolean addUserToClass(int classId, int userId) throws ClassDoesNotExistException, RelationshipAlreadyExists, SQLException {
+        if (!userExists(userId)) throw new ClassDoesNotExistException();
+        if (relationshipExists(classId, userId)) throw new RelationshipAlreadyExists();
+
+        var query = "insert into UserClasses (class_id, user_id) value (?,?)";
+        var statement = db.prepareStatement(query);
+        statement.setInt(1, classId);
+        statement.setInt(2, userId);
+
+        return statement.executeUpdate() > 0;
+    }
+
+    public boolean removeUserFromClass(int classId, int userId) throws ClassDoesNotExistException, SQLException, RelationshipDoesNotExist {
+
+        if (!userExists(userId)) throw new ClassDoesNotExistException();
+        if (!relationshipExists(classId, userId)) throw new RelationshipDoesNotExist();
+
+        var query = "delete from UserClasses where class_id = ? and user_id = ?";
+        var statement = db.prepareStatement(query);
+        statement.setInt(1, classId);
+        statement.setInt(2, userId);
+
+        return statement.executeUpdate() > 0;
+    }
+
+    boolean relationshipExists(int classId, int userId) throws SQLException {
+
+        String query = "SELECT EXISTS(SELECT 1 FROM UserClasses WHERE class_id = ? and user_id = ?)";
+
+        var preparedStatement = db.prepareStatement(query);
+        preparedStatement.setInt(1, classId);
+        preparedStatement.setInt(2, userId);
+        var resultSet = preparedStatement.executeQuery();
+
+        if (resultSet.next()) {
+            return resultSet.getBoolean(1);
+        }
+        return false;
     }
 
     @Override
