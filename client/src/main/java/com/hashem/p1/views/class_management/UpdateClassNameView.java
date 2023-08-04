@@ -29,10 +29,7 @@ public class UpdateClassNameView implements View {
 
         var response = HttpClient.sendRequest(
                 UpdateClassCommandResponse.class,
-                new UpdateClassCommand(
-                        clazz
-                                .withName(name)
-                                .withUsers(new HashSet<>())));
+                new UpdateClassCommand(clazz.id(), name));
 
         if (response.success())
             System.out.println("Update Successful");

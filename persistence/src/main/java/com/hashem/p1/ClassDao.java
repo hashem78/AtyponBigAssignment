@@ -65,6 +65,18 @@ public class ClassDao implements AutoCloseable {
         return new HashSet<>(classesMap.values());
     }
 
+    public boolean update(int id, String newClassName) throws SQLException, ClassDoesNotExistException {
+
+        if (!classExists(id)) throw new ClassDoesNotExistException();
+
+        var sqlQuery = "update Classes set name = ? where id = ?";
+        var statement = db.prepareStatement(sqlQuery);
+        statement.setString(1, newClassName);
+        statement.setInt(2, id);
+
+        return statement.executeUpdate() > 0;
+    }
+
     public int create(String name) throws SQLException, ClassAlreadyExistsException {
 
         if (classExists(name)) throw new ClassAlreadyExistsException();
