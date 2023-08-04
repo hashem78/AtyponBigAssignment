@@ -94,6 +94,17 @@ public class ClassDao implements AutoCloseable {
         return generatedKeys.getInt(1);
     }
 
+    public boolean delete(int id) throws SQLException, ClassDoesNotExistException {
+
+        if (!classExists(id)) throw new ClassDoesNotExistException();
+
+        var sqlQuery = "delete from Classes where id = ?";
+        var statement = db.prepareStatement(sqlQuery);
+        statement.setInt(1, id);
+
+        return statement.executeUpdate() > 0;
+    }
+
 
     boolean classExists(String name) throws SQLException {
         String classExistsQuery = "SELECT EXISTS(SELECT 1 FROM Classes WHERE name = ?)";

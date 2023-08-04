@@ -135,7 +135,7 @@ public class DefaultCommandVisitor implements CommandVisitor {
     public Response visit(UpdateClassCommand command) {
         try (var dao = new ClassDao()) {
             var success = dao.update(command.id(), command.name());
-            return new UpdateClassCommandResponse(success);
+            return new DeleteRoleCommandResponse(success);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -143,7 +143,12 @@ public class DefaultCommandVisitor implements CommandVisitor {
 
     @Override
     public Response visit(DeleteClassCommand command) {
-        return null;
+        try (var dao = new ClassDao()) {
+            var success = dao.delete(command.id());
+            return new UpdateClassCommandResponse(success);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
