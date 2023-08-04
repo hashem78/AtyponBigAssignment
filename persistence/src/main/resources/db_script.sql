@@ -34,8 +34,7 @@ CREATE TABLE Courses
 CREATE TABLE Classes
 (
     id      INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
-    user_id INT NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES Users (id) ON DELETE CASCADE
+    name    varchar(100)
 );
 
 CREATE TABLE Grades
@@ -48,4 +47,13 @@ CREATE TABLE Grades
     FOREIGN KEY (user_id) REFERENCES Users (id) ON DELETE CASCADE,
     FOREIGN KEY (class_id) REFERENCES Classes (id) ON DELETE CASCADE,
     FOREIGN KEY (course_id) REFERENCES Courses (id) ON DELETE CASCADE
+);
+
+CREATE TABLE UserClasses
+(
+    user_id INT NOT NULL,
+    class_id INT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES Users (id) ON DELETE CASCADE,
+    FOREIGN KEY (class_id) REFERENCES Classes (id) ON DELETE CASCADE,
+    PRIMARY KEY (user_id, class_id)
 );
