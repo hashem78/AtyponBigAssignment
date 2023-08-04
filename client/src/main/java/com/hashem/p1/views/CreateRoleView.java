@@ -17,8 +17,7 @@ public class CreateRoleView implements View {
 
         var response = HttpClient.sendRequest(
                 CreateRoleCommandResponse.class,
-                new CreateRoleCommand(roleName),
-                context.socket()
+                new CreateRoleCommand(roleName)
         );
 
         if (response.id() == -1) {

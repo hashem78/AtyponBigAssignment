@@ -5,13 +5,14 @@ import com.hashem.p1.models.User;
 
 import java.sql.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class UserDao implements AutoCloseable {
 
     final Connection db;
 
     public UserDao() {
-        this.db = ConnectionFactory.getConnection();
+        this.db = ConnectionFactory.getDbConnection();
     }
 
     public User getUser(int id) throws SQLException, UserDoesNotExistException {
@@ -42,7 +43,7 @@ public class UserDao implements AutoCloseable {
                 .executeQuery();
 
         final var userMap = new HashMap<Integer, User.UserBuilder>();
-        final var userMapRoles = new HashMap<Integer, List<Role>>();
+        final var userMapRoles = new HashMap<Integer, Set<Role>>();
         while (resultSet.next()) {
             int userId = resultSet.getInt("user_id");
 
@@ -55,7 +56,7 @@ public class UserDao implements AutoCloseable {
                 userMap.put(userId, user);
             }
             if (!userMapRoles.containsKey(userId)) {
-                userMapRoles.put(userId, new ArrayList<>());
+                userMapRoles.put(userId, new HashSet<>());
             }
             var roleId = resultSet.getInt("role_id");
             var roleName = resultSet.getString("role_name");
@@ -104,11 +105,16 @@ public class UserDao implements AutoCloseable {
         return user_id;
     }
 
-    boolean update(int user_id, String field, Object value) throws SQLException {
-        var query = "UPDATE Users set " + field + " = ? where id = ?";
+    public boolean update(User user) throws SQLException, UserDoesNotExistException {
+
+        if (!userExists(user.id())) throw new UserDoesNotExistException();
+
+        var query = "UPDATE Users set email = ?, password = ? where id = ?";
         var statement = db.prepareStatement(query);
-        statement.setObject(1, value);
-        statement.setInt(2, user_id);
+        statement.setString(1, user.email());
+        statement.setString(2, user.password());
+        statement.setInt(3, user.id());
+
         return statement.executeUpdate() > 0;
     }
 
@@ -199,7 +205,7 @@ public class UserDao implements AutoCloseable {
         }
 
         return userBuilder
-                .roles(roleMap.values().stream().toList())
+                .roles(new HashSet<>(roleMap.values()))
                 .build();
     }
 

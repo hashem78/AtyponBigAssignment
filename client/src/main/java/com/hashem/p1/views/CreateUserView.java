@@ -20,8 +20,7 @@ public class CreateUserView implements View {
 
         var response = HttpClient.sendRequest(
                 CreateUserCommandResponse.class,
-                new CreateUserCommand(email, password, new ArrayList<>()),
-                context.socket()
+                new CreateUserCommand(email, password, new ArrayList<>())
         );
 
         if (response.id() == -1) {

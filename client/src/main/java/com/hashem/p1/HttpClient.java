@@ -12,12 +12,12 @@ import java.net.Socket;
 
 public class HttpClient {
 
-    public static <T extends Response, U extends RootObject> T sendRequest(Class<T> clazz, U obj, Socket serverSocket) {
+    public static <T extends Response, U extends RootObject> T sendRequest(Class<T> clazz, U obj) {
 
         var objectMapper = new ObjectMapper();
         var http = new RawHttp();
 
-        try (var server = serverSocket) {
+        try (var server = new Socket("localhost", 8000)) {
 
             var bodyJson = objectMapper.writeValueAsString(obj);
             var json = HttpRequestBuilder.JsonRequest(bodyJson);

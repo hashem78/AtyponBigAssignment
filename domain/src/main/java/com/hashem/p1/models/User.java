@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.With;
 
 import java.util.List;
+import java.util.Set;
 
 @Builder
 @With
@@ -12,7 +13,7 @@ public record User(
         int id,
         String email,
         String password,
-        List<Role> roles) implements Root {
+        Set<Role> roles) implements Root {
 
     public boolean hasRole(String name) {
         var role = roles.stream()

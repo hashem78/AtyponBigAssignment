@@ -12,10 +12,13 @@ import com.hashem.p1.responses.Response;
 @JsonSubTypes({
         @JsonSubTypes.Type(value = CreateUserCommand.class, name = "create_user"),
         @JsonSubTypes.Type(value = CreateRoleCommand.class, name = "create_role"),
-        @JsonSubTypes.Type(value = AddUserToClassCommand.class, name = "add_user_to_class"),
-        @JsonSubTypes.Type(value = CreateClassCommand.class, name = "create_class"),
+        @JsonSubTypes.Type(value = UpdateUserCommand.class, name = "update_user"),
+        @JsonSubTypes.Type(value = UpdateUserRolesAddCommand.class, name = "update_user_roles_add"),
+        @JsonSubTypes.Type(value = UpdateUserRolesRemoveCommand.class, name = "update_user_roles_remove"),
         @JsonSubTypes.Type(value = RemoveUserCommand.class, name = "remove_user"),
         @JsonSubTypes.Type(value = RemoveUserFromClassCommand.class, name = "remove_user_from_class"),
+        @JsonSubTypes.Type(value = AddUserToClassCommand.class, name = "add_user_to_class"),
+        @JsonSubTypes.Type(value = CreateClassCommand.class, name = "create_class"),
 })
 public interface Command extends RootObject {
 
@@ -23,5 +26,6 @@ public interface Command extends RootObject {
     default Response accept(BasicObjectVisitor visitor) {
         return visitor.visit(this);
     }
+
     Response accept(BasicCommandVisitor visitor);
 }

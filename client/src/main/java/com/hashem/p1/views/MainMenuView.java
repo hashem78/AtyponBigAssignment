@@ -4,39 +4,21 @@ import com.hashem.p1.context.Context;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
-import java.util.stream.IntStream;
 
 public class MainMenuView implements View {
-
-    record ViewProperties(String name, String description) {
-    }
-
-    record ViewMapping(int index, MainMenuView.ViewProperties properties) {
-        @Override
-        public String toString() {
-            return index + ". " + properties.description;
-        }
-    }
 
     @Override
     public void run(Context context) {
 
         var viewProperties = getViewProperties(context);
 
-        viewProperties.add(new MainMenuView.ViewProperties("exit", "Exit"));
+        viewProperties.add(new ViewProperties("exit", "Exit"));
 
-        IntStream.range(0, viewProperties.size())
-                .mapToObj(i -> new MainMenuView.ViewMapping(i, viewProperties.get(i)))
-                .forEach(System.out::println);
-
-        System.out.print("Enter your choice: ");
-        var scanner = new Scanner(System.in);
-        var userChoice = scanner.nextInt();
+        var userChoice = Helpers.getUserChoice(viewProperties);
 
         context
                 .callbackStore()
-                .get(viewProperties.get(userChoice).name)
+                .get(viewProperties.get(userChoice).name())
                 .run(context);
     }
 
@@ -52,7 +34,7 @@ public class MainMenuView implements View {
                         add(new ViewProperties("get_roles", "Get All Roles"));
                         add(new ViewProperties("create_user", "Create a new User"));
                         add(new ViewProperties("create_role", "Create a new Role"));
-                        add(new ViewProperties("assign_role_to_user", "Assign a role to a user"));
+                        add(new ViewProperties("update_user", "Update a user"));
                     }
                     add(new ViewProperties("logout", "Logout"));
                 }

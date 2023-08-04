@@ -14,7 +14,7 @@ public class RoleDao implements AutoCloseable {
     final Connection db;
 
     public RoleDao() {
-        this.db = ConnectionFactory.getConnection();
+        this.db = ConnectionFactory.getDbConnection();
     }
 
     public Set<Role> getAllRoles() throws SQLException {
@@ -144,6 +144,47 @@ public class RoleDao implements AutoCloseable {
             userIds.add(resultSet.getInt("id"));
         }
         return userIds;
+    }
+
+    boolean relationshipExists(int userId, int roleId) throws SQLException {
+
+        String query = "SELECT EXISTS(SELECT 1 FROM UserRoles WHERE user_id = ? and role_id = ?)";
+
+        var preparedStatement = db.prepareStatement(query);
+        preparedStatement.setInt(1, userId);
+        preparedStatement.setInt(2, roleId);
+        var resultSet = preparedStatement.executeQuery();
+
+        if (resultSet.next()) {
+            return resultSet.getBoolean(1);
+        }
+        return false;
+    }
+
+    public boolean addRoleToUser(int userId, int roleId) throws RoleDoesNotExistException, SQLException, RelationshipAlreadyExists {
+
+        if (!roleExists(roleId)) throw new RoleDoesNotExistException();
+        if (relationshipExists(userId, roleId)) throw new RelationshipAlreadyExists();
+
+        var query = "insert into UserRoles (user_id, role_id) value (?,?)";
+        var statement = db.prepareStatement(query);
+        statement.setInt(1, userId);
+        statement.setInt(2, roleId);
+
+        return statement.executeUpdate() > 0;
+    }
+
+    public boolean removeRoleFromUser(int userId, int roleId) throws RoleDoesNotExistException, SQLException, RelationshipDoesNotExist {
+
+        if (!roleExists(roleId)) throw new RoleDoesNotExistException();
+        if (!relationshipExists(userId, roleId)) throw new RelationshipDoesNotExist();
+
+        var query = "delete from UserRoles where user_id = ? and role_id = ?";
+        var statement = db.prepareStatement(query);
+        statement.setInt(1, userId);
+        statement.setInt(2, roleId);
+
+        return statement.executeUpdate() > 0;
     }
 
     @Override
