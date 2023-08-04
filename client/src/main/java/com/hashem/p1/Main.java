@@ -29,7 +29,7 @@ public class Main {
                 .register("update_user_roles", new UpdateUserRolesView())
                 .register("update_user_roles_add", new UpdateUserRolesAddView())
                 .register("update_user_roles_remove", new UpdateUserRolesRemoveView())
-                .register("delete_user", new UpdateUserView())
+                .register("delete_user", new DeleteUserView())
                 .register("logout", new LogoutView())
                 .register("exit", new ExitView())
                 .create();

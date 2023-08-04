@@ -118,7 +118,10 @@ public class UserDao implements AutoCloseable {
         return statement.executeUpdate() > 0;
     }
 
-    boolean deleteUser(int id) throws SQLException {
+    public boolean deleteUser(int id) throws SQLException, UserDoesNotExistException {
+
+        if(!userExists(id)) throw new UserDoesNotExistException();
+
         var query = "delete from Users where id = ?";
         var statement = db.prepareStatement(query);
         statement.setInt(1, id);

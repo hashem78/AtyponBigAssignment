@@ -2,10 +2,7 @@ package com.hashem.p1.visitors;
 
 import com.hashem.p1.*;
 import com.hashem.p1.commands.*;
-import com.hashem.p1.responses.CreateRoleCommandResponse;
-import com.hashem.p1.responses.CreateUserCommandResponse;
-import com.hashem.p1.responses.Response;
-import com.hashem.p1.responses.UpdateUserCommandResponse;
+import com.hashem.p1.responses.*;
 
 public class DefaultBasicCommandVisitor implements BasicCommandVisitor {
     @Override
@@ -73,17 +70,25 @@ public class DefaultBasicCommandVisitor implements BasicCommandVisitor {
     }
 
     @Override
+    public Response visit(DeleteUserCommand command) {
+
+        try (var dao = new UserDao()) {
+            var success = dao.deleteUser(command.id());
+            return new DeleteUserCommandResponse(success);
+        } catch (UserAlreadyExistsException e) {
+            return new DeleteUserCommandResponse(false);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
     public Response visit(AddUserToClassCommand command) {
         return null;
     }
 
     @Override
     public Response visit(CreateClassCommand command) {
-        return null;
-    }
-
-    @Override
-    public Response visit(RemoveUserCommand command) {
         return null;
     }
 

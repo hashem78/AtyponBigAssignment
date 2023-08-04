@@ -8,8 +8,8 @@ public interface BasicCommandVisitor {
     Response visit(UpdateUserCommand command);
     Response visit(UpdateUserRolesAddCommand command);
     Response visit(UpdateUserRolesRemoveCommand command);
+    Response visit(DeleteUserCommand command);
     Response visit(AddUserToClassCommand command);
     Response visit(CreateClassCommand command);
-    Response visit(RemoveUserCommand command);
     Response visit(RemoveUserFromClassCommand command);
 }
