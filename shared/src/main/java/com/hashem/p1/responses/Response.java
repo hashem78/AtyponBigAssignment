@@ -3,10 +3,12 @@ package com.hashem.p1.responses;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.hashem.p1.responses.classes.CreateClassCommandResponse;
-import com.hashem.p1.responses.classes.DeleteClassCommandResponse;
-import com.hashem.p1.responses.classes.GetClassesQueryResponse;
-import com.hashem.p1.responses.classes.UpdateClassCommandResponse;
+import com.hashem.p1.commands.CreateGradeCommand;
+import com.hashem.p1.commands.grades.UpdateGradeCommand;
+import com.hashem.p1.responses.classes.*;
+import com.hashem.p1.responses.grades.DeleteGradeCommandResponse;
+import com.hashem.p1.responses.grades.GetGradesForUserQueryResponse;
+import com.hashem.p1.responses.grades.UpdateGradeCommandResponse;
 import com.hashem.p1.responses.roles.CreateRoleCommandResponse;
 import com.hashem.p1.responses.roles.GetRolesQueryResponse;
 import com.hashem.p1.responses.users.GetUsersQueryResponse;
@@ -34,6 +36,13 @@ import com.hashem.p1.responses.users.UpdateUserCommandResponse;
         @JsonSubTypes.Type(value = GetClassesQueryResponse.class, name = "get_classes_response"),
         @JsonSubTypes.Type(value = UpdateClassCommandResponse.class, name = "update_class_response"),
         @JsonSubTypes.Type(value = DeleteClassCommandResponse.class, name = "delete_class_response"),
+        @JsonSubTypes.Type(value = GetClassesForUserQueryResponse.class, name = "get_classes_for_user_response"),
+
+        @JsonSubTypes.Type(value = CreateGradeCommand.class, name = "create_grade_response"),
+        @JsonSubTypes.Type(value = GetGradesForUserQueryResponse.class, name = "get_grades_for_user_response"),
+        @JsonSubTypes.Type(value = UpdateGradeCommandResponse.class, name = "update_grade_response"),
+        @JsonSubTypes.Type(value = DeleteGradeCommandResponse.class, name = "delete_grade_response"),
+
         @JsonSubTypes.Type(value = ErrorResponse.class, name = "error_response")
 })
 public interface Response {

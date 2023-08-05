@@ -1,6 +1,7 @@
 package com.hashem.p1.views;
 
 import com.hashem.p1.models.CClass;
+import com.hashem.p1.models.Grade;
 import com.hashem.p1.models.Role;
 import com.hashem.p1.models.User;
 import com.hashem.p1.views.core.ViewMapping;
@@ -100,6 +101,18 @@ public class Helpers {
         table.addRule();
         table.addRow(role.id(), role.name());
         table.addRule();
+        System.out.println(table.render());
+    }
+
+    public static void displayGrades(List<Grade> grades) {
+        var table = new AsciiTable();
+        table.addRule();
+        table.addRow("GradeId", "Grade");
+        table.addRule();
+        for (var grade : grades) {
+            table.addRow(grade.id(), grade.grade());
+            table.addRule();
+        }
         System.out.println(table.render());
     }
 

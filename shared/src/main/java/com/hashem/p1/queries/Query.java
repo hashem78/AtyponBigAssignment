@@ -14,6 +14,8 @@ import com.hashem.p1.responses.Response;
         @JsonSubTypes.Type(value = GetRolesQuery.class, name = "get_roles"),
         @JsonSubTypes.Type(value = GetClassesQuery.class, name = "get_classes"),
         @JsonSubTypes.Type(value = GetClassMembersQuery.class, name = "get_class_members"),
+        @JsonSubTypes.Type(value = GetClassesForUserQuery.class, name = "get_classes_for_user"),
+        @JsonSubTypes.Type(value = GetGradesForUserQuery.class, name = "get_grades_for_user"),
 })
 public interface Query extends RootObject {
 

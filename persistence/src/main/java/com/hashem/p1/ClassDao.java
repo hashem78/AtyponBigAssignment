@@ -5,6 +5,7 @@ import com.hashem.p1.models.Role;
 import com.hashem.p1.models.User;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
@@ -41,6 +42,38 @@ public class ClassDao implements AutoCloseable {
                 """;
         var statement = db.prepareStatement(sqlQuery);
         var resultSet = statement.executeQuery();
+        return extractClassesFromResultSet(resultSet);
+    }
+
+    public Set<CClass> getClasses(int id) throws Exception {
+        var sqlQuery = """
+                SELECT
+                    Classes.id AS class_id,
+                    Classes.name AS class_name,
+                    Users.id AS user_id,
+                    Users.email,
+                    Roles.name AS role_name,
+                    Roles.id as role_id
+                FROM
+                    Classes
+                        LEFT JOIN
+                    UserClasses ON Classes.id = UserClasses.class_id
+                        LEFT JOIN
+                    Users ON UserClasses.user_id = Users.id
+                        LEFT JOIN
+                    UserRoles ON Users.id = UserRoles.user_id
+                        LEFT JOIN
+                    Roles ON UserRoles.role_id = Roles.id
+                    WHERE UserRoles.user_id = ?;
+                """;
+        var statement = db.prepareStatement(sqlQuery);
+        statement.setInt(1, id);
+        var resultSet = statement.executeQuery();
+
+        return extractClassesFromResultSet(resultSet);
+    }
+
+    private Set<CClass> extractClassesFromResultSet(ResultSet resultSet) throws SQLException {
         var classesMap = new HashMap<Integer, CClass>();
         var usersMap = new HashMap<Integer, User>();
         while (resultSet.next()) {

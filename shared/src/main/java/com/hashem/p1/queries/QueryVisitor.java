@@ -9,4 +9,6 @@ public interface QueryVisitor {
     Response visit(GetRolesQuery query);
     Response visit(GetClassMembersQuery query);
     Response visit(GetClassesQuery query);
+    Response visit(GetClassesForUserQuery query);
+    Response visit(GetGradesForUserQuery query);
 }

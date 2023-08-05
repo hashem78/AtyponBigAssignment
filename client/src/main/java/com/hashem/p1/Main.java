@@ -9,6 +9,7 @@ import com.hashem.p1.views.auth.LoginView;
 import com.hashem.p1.views.auth.LogoutView;
 import com.hashem.p1.views.class_management.*;
 import com.hashem.p1.views.core.ViewRegistry;
+import com.hashem.p1.views.grade_management.*;
 import com.hashem.p1.views.role_management.*;
 import com.hashem.p1.views.user_management.*;
 import rawhttp.core.RawHttp;
@@ -49,6 +50,12 @@ public class Main {
                 .register("update_class_users", new UpdateClassUsersView())
                 .register("update_class_users_add", new UpdateClassUsersAddView())
                 .register("update_class_users_remove", new UpdateClassUsersRemoveView())
+                .register("grade_management", new GradeManagementView())
+                .register("edit_grades", new EditGradesView())
+                .register("get_grades", new GetGradesForAUserView())
+                .register("create_grade", new CreateGradeView())
+                .register("update_grade", new UpdateGradeView())
+                .register("delete_grade", new DeleteGradeView())
                 .register("logout", new LogoutView())
                 .register("exit", new ExitView())
                 .create();

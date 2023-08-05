@@ -3,6 +3,8 @@ package com.hashem.p1.visitors;
 import com.hashem.p1.*;
 import com.hashem.p1.commands.*;
 import com.hashem.p1.commands.classes.*;
+import com.hashem.p1.commands.grades.DeleteGradeCommand;
+import com.hashem.p1.commands.grades.UpdateGradeCommand;
 import com.hashem.p1.commands.role.CreateRoleCommand;
 import com.hashem.p1.commands.role.DeleteRoleCommand;
 import com.hashem.p1.commands.role.UpdateRoleCommand;
@@ -11,6 +13,8 @@ import com.hashem.p1.responses.*;
 import com.hashem.p1.responses.classes.CreateClassCommandResponse;
 import com.hashem.p1.responses.classes.DeleteClassCommandResponse;
 import com.hashem.p1.responses.classes.UpdateClassCommandResponse;
+import com.hashem.p1.responses.grades.DeleteGradeCommandResponse;
+import com.hashem.p1.responses.grades.UpdateGradeCommandResponse;
 import com.hashem.p1.responses.roles.CreateRoleCommandResponse;
 import com.hashem.p1.responses.roles.UpdateRoleCommandResponse;
 import com.hashem.p1.responses.users.CreateUserCommandResponse;
@@ -179,6 +183,36 @@ public class DefaultCommandVisitor implements CommandVisitor {
             return new UpdateClassCommandResponse(success);
         } catch (RelationshipDoesNotExist | ClassDoesNotExistException e) {
             return new UpdateClassCommandResponse(false);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public Response visit(CreateGradeCommand command) {
+        try (var dao = new GradeDao()) {
+            var success = dao.createGrade(command.classId(), command.userId(), command.grade());
+            return new CreateGradeCommandResponse(success);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public Response visit(UpdateGradeCommand command) {
+        try (var dao = new GradeDao()) {
+            var success = dao.updateGrade(command.gradeId(), command.classId(), command.userId(), command.grade());
+            return new UpdateGradeCommandResponse(success);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public Response visit(DeleteGradeCommand command) {
+        try (var dao = new GradeDao()) {
+            var success = dao.deleteGrade(command.gradeId(), command.classId(), command.userId());
+            return new DeleteGradeCommandResponse(success);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

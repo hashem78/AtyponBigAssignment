@@ -3,6 +3,8 @@ package com.hashem.p1.commands;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.hashem.p1.commands.classes.*;
+import com.hashem.p1.commands.grades.DeleteGradeCommand;
+import com.hashem.p1.commands.grades.UpdateGradeCommand;
 import com.hashem.p1.commands.role.CreateRoleCommand;
 import com.hashem.p1.commands.role.DeleteRoleCommand;
 import com.hashem.p1.commands.role.UpdateRoleCommand;
@@ -27,7 +29,10 @@ import com.hashem.p1.responses.Response;
         @JsonSubTypes.Type(value = UpdateClassCommand.class, name = "update_class"),
         @JsonSubTypes.Type(value = DeleteClassCommand.class, name = "delete_class"),
         @JsonSubTypes.Type(value = UpdateClassUsersAddCommand.class, name = "update_class_users_add"),
-        @JsonSubTypes.Type(value = UpdateClassUsersRemoveCommand.class, name = "update_class_users_remove")
+        @JsonSubTypes.Type(value = UpdateClassUsersRemoveCommand.class, name = "update_class_users_remove"),
+        @JsonSubTypes.Type(value = CreateGradeCommand.class, name = "create_grade"),
+        @JsonSubTypes.Type(value = UpdateGradeCommand.class, name = "update_grade"),
+        @JsonSubTypes.Type(value = DeleteGradeCommand.class, name = "delete_grade")
 })
 public interface Command extends RootObject {
 
