@@ -11,7 +11,7 @@ import com.hashem.p1.views.core.View;
 
 import java.util.Scanner;
 
-public class GetGradesForAUserView implements View {
+public class GetGradesForAUserAdminView implements View {
     @Override
     public void run(Context context) {
 
@@ -28,9 +28,12 @@ public class GetGradesForAUserView implements View {
         System.out.print("Enter id of the class the user is in: ");
         var classId = scanner.nextInt();
 
+        System.out.print("Enter id of user to get grades for: ");
+        var userIdToGetGradesFor = scanner.nextInt();
+
         var gradesResponse = HttpClient.sendRequest(
                 GetGradesForUserQueryResponse.class,
-                new GetGradesForUserQuery(classId, userIdToGetClassesFor)
+                new GetGradesForUserQuery(classId, userIdToGetGradesFor)
         );
 
        Helpers.displayGrades(gradesResponse.grades());

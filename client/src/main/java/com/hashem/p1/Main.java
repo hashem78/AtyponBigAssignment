@@ -52,6 +52,7 @@ public class Main {
                 .register("update_class_users_remove", new UpdateClassUsersRemoveView())
                 .register("grade_management", new GradeManagementView())
                 .register("edit_grades", new EditGradesView())
+                .register("get_grades_admin", new GetGradesForAUserAdminView())
                 .register("get_grades", new GetGradesForAUserView())
                 .register("create_grade", new CreateGradeView())
                 .register("update_grade", new UpdateGradeView())

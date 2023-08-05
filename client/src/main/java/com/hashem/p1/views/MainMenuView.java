@@ -30,12 +30,15 @@ public class MainMenuView implements View {
         return switch (authState) {
             case LoggedIn -> new ArrayList<>() {
                 {
-                    if(user.hasRole("admin"))
-                    {
+                    if (user.hasRole("admin")) {
                         add(new ViewProperties("role_management", "Manage Roles"));
                         add(new ViewProperties("user_management", "Manage Users"));
                         add(new ViewProperties("class_management", "Manage Classes"));
                         add(new ViewProperties("grade_management", "Manage Grades"));
+                    } else if (user.hasRole("teacher")) {
+                        add(new ViewProperties("grade_management", "Manage Grades"));
+                    } else if (user.hasRole("student")) {
+                        add(new ViewProperties("get_grades", "Get Grades"));
                     }
                     add(new ViewProperties("logout", "Logout"));
                 }

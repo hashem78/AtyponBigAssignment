@@ -11,7 +11,7 @@ public class GradeManagementView implements View {
     @Override
     public void run(Context context) {
         var viewProperties = new ArrayList<ViewProperties>() {{
-            add(new ViewProperties("get_grades", "Get Grades for a Class"));
+            add(new ViewProperties("get_grades_admin", "Get Grades for a Class"));
             add(new ViewProperties("edit_grades", "Edit Grades for a Class"));
         }};
 

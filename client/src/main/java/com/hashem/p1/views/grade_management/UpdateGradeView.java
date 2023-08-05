@@ -17,7 +17,7 @@ public class UpdateGradeView implements View {
             return;
         var viewBag = (GradesViewBag) viewBagOptional.get();
 
-        new GetGradesForAUserView().run(context);
+        new GetGradesForAUserAdminView().run(context);
 
         var scanner = new Scanner(System.in);
 
