@@ -4,12 +4,9 @@ import com.hashem.p1.UserDao;
 import com.hashem.p1.UserDoesNotExistException;
 import com.hashem.p1.models.User;
 
-import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 public class AuthService {
-
 
     final UserDao userDao;
 

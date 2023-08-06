@@ -8,7 +8,9 @@ version = '1.0-SNAPSHOT'
 repositories {
     mavenCentral()
 }
-
+jar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
 dependencies {
     implementation project(path: ':domain')
     testImplementation platform('org.junit:junit-bom:5.9.1')
