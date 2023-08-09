@@ -54,6 +54,7 @@ public class GradeDao implements AutoCloseable {
         String sql = """
                 SELECT
                     Grades.id,
+                    Users.email,
                     COALESCE(Grades.grade, 0) AS grade
                 FROM
                        Users
@@ -75,10 +76,11 @@ public class GradeDao implements AutoCloseable {
         var grades = new ArrayList<Grade>();
 
         while (rs.next()) {
-            int id = rs.getInt("id");
-            float grade = rs.getFloat("grade");
+            var id = rs.getInt("id");
+            var grade = rs.getFloat("grade");
+            var email = rs.getString("email");
 
-            Grade gradeObj = new Grade(id, userId, classId, grade);
+            Grade gradeObj = new Grade(id, userId, email, classId, grade);
 
             grades.add(gradeObj);
         }

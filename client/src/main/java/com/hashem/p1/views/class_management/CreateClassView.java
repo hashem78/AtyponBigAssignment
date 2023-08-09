@@ -18,7 +18,7 @@ public class CreateClassView implements View {
 
         var response = HttpClient.sendRequest(
                 CreateClassCommandResponse.class,
-                new CreateClassCommand(name)
+                new CreateClassCommand(context.authService().getUser().id(), name)
         );
 
         if (response.id() == -1) {

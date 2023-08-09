@@ -116,16 +116,24 @@ public class ClassDao implements AutoCloseable {
                     Roles.id as role_id
                 FROM
                     Classes
-                        LEFT JOIN
+                LEFT JOIN
                     UserClasses ON Classes.id = UserClasses.class_id
-                        LEFT JOIN
+                LEFT JOIN
                     Users ON UserClasses.user_id = Users.id
-                        LEFT JOIN
+                LEFT JOIN
                     UserRoles ON Users.id = UserRoles.user_id
-                        LEFT JOIN
+                LEFT JOIN
                     Roles ON UserRoles.role_id = Roles.id
-                    WHERE UserRoles.user_id = ?;
-                """;
+                WHERE
+                    Classes.id IN (
+                        SELECT
+                            class_id
+                        FROM
+                            UserClasses
+                        WHERE
+                            user_id = ?
+                    );
+                 """;
         var statement = db.prepareStatement(sqlQuery);
         statement.setInt(1, id);
         var resultSet = statement.executeQuery();
@@ -173,20 +181,30 @@ public class ClassDao implements AutoCloseable {
         return statement.executeUpdate() > 0;
     }
 
-    public int create(String name) throws SQLException, ClassAlreadyExistsException {
+    public int create(int creatorId, String name) throws SQLException, ClassAlreadyExistsException {
 
+        db.setAutoCommit(false);
         if (classExists(name)) throw new ClassAlreadyExistsException();
 
-        var sqlQuery = "insert into Classes (id,name) value (default, ?)";
-        var statement = db.prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS);
-        statement.setString(1, name);
-        statement.executeUpdate();
-
-        var generatedKeys = statement.getGeneratedKeys();
+        var createClassQuery = "insert into Classes (id,name) value (default, ?)";
+        var createClassStatement = db.prepareStatement(
+                createClassQuery, Statement.RETURN_GENERATED_KEYS);
+        createClassStatement.setString(1, name);
+        createClassStatement.executeUpdate();
+        var generatedKeys = createClassStatement.getGeneratedKeys();
 
         if (!generatedKeys.next())
             throw new SQLException("Creating class failed, no ID obtained.");
 
+        var insertUserQuery = "insert into UserClasses (user_id, class_id) value (?,?)";
+        var insertUserQueryStatement = db.prepareStatement(insertUserQuery);
+        insertUserQueryStatement.setInt(1, creatorId);
+        insertUserQueryStatement.setInt(2, generatedKeys.getInt(1));
+        insertUserQueryStatement.executeUpdate();
+
+
+        db.commit();
+        db.setAutoCommit(true);
         return generatedKeys.getInt(1);
     }
 

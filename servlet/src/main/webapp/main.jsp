@@ -21,6 +21,8 @@
 
 <%--@elvariable id="classGradesPairs" type="java.util.List<com.hashem.p1.MainViewModel>"--%>
 <%--@elvariable id="grade" type="com.hashem.p1.models.Grade"--%>
+<%--@elvariable id="user" type="com.hashem.p1.models.User"--%>
+<%--@elvariable id="loggedInUserRoles" type="java.lang.String"--%>
 
 <style>
     .container {
@@ -33,7 +35,7 @@
 </style>
 
 <div class="container">
-    Grades for ${userEmail}
+    Classes for ${user.email()} (${loggedInUserRoles})
 </div>
 
 <c:forEach items="${classGradesPairs}" var="model">
@@ -41,11 +43,12 @@
         <table class="table">
             <thead>
             <tr>
-                <th colspan="2">Grades for ${model.clazz().name()}</th>
+                <th colspan="2">Grades for class ${model.clazz().name()}</th>
             </tr>
             <tr>
                 <th scope="col">#</th>
                 <th scope="col">Grade</th>
+                <th scope="col">User</th>
             </tr>
             </thead>
             <tbody>
@@ -53,6 +56,7 @@
                 <tr>
                     <th scope="row">${grade.id()}</th>
                     <td>${grade.grade()}</td>
+                    <td>${grade.email()}</td>
                 </tr>
             </c:forEach>
             </tbody>

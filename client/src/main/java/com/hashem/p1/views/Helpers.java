@@ -18,7 +18,7 @@ public class Helpers {
     public static void displayUsers(Set<User> users) {
         var table = new AsciiTable();
         table.addRule();
-        table.addRow("Id", "Email", "Password", "Roles");
+        table.addRow("Id", "Email", "Roles");
         table.addRule();
 
         users.forEach(user -> {
@@ -26,7 +26,7 @@ public class Helpers {
                     .map(Role::name)
                     .collect(Collectors.joining(", "));
 
-            table.addRow(user.id(), user.email(), user.passwordHash(), roles);
+            table.addRow(user.id(), user.email(), roles);
             table.addRule();
         });
 
@@ -37,14 +37,14 @@ public class Helpers {
 
         var table = new AsciiTable();
         table.addRule();
-        table.addRow("Id", "Email", "Password", "Roles");
+        table.addRow("Id", "Email", "Roles");
         table.addRule();
 
         var roles = user.roles().stream()
                 .map(Role::name)
                 .collect(Collectors.joining(", "));
 
-        table.addRow(user.id(), user.email(), user.passwordHash(), roles);
+        table.addRow(user.id(), user.email(), roles);
 
         table.addRule();
         System.out.println(table.render());
@@ -107,10 +107,10 @@ public class Helpers {
     public static void displayGrades(List<Grade> grades) {
         var table = new AsciiTable();
         table.addRule();
-        table.addRow("GradeId", "Grade");
+        table.addRow("Email", "Grade");
         table.addRule();
         for (var grade : grades) {
-            table.addRow(grade.id(), grade.grade());
+            table.addRow(grade.email(), grade.grade());
             table.addRule();
         }
         System.out.println(table.render());

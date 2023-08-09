@@ -129,7 +129,7 @@ public class DefaultCommandVisitor implements CommandVisitor {
     @Override
     public Response visit(CreateClassCommand command) {
         try (var dao = new ClassDao()) {
-            var id = dao.create(command.name());
+            var id = dao.create(command.creatorId(), command.name());
             return new CreateClassCommandResponse(id);
         } catch (ClassAlreadyExistsException e) {
             return new CreateClassCommandResponse(-1);

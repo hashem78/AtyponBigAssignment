@@ -32,8 +32,7 @@ public class LoginServlet extends HttpServlet {
 
         try (var userDao = new UserDao()) {
             var user = userDao.getByEmailAndPassword(email, DigestUtils.sha256Hex(password));
-            request.getSession().setAttribute("userEmail", email);
-            request.getSession().setAttribute("userId", user.id());
+            request.getSession().setAttribute("user", user);
             System.out.println(user);
             var dispatcher = request.getRequestDispatcher("/MainServlet");
             dispatcher.forward(request, response);

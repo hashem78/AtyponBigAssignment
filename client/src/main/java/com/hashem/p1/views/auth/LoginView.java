@@ -16,7 +16,7 @@ public class LoginView implements View {
         var scanner = new Scanner(System.in);
         System.out.print("Enter your email: ");
         var email = scanner.next();
-        System.out.print("Enter your passwordHash: ");
+        System.out.print("Enter your password: ");
         var password = scanner.next();
         try {
             context.authService().loginWithEmailAndPassword(email, DigestUtils.sha256Hex(password));
