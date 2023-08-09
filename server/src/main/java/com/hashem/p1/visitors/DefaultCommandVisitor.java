@@ -22,14 +22,12 @@ import com.hashem.p1.responses.roles.DeleteRoleCommandResponse;
 import com.hashem.p1.responses.users.DeleteUserCommandResponse;
 import com.hashem.p1.responses.users.UpdateUserCommandResponse;
 
-import java.sql.SQLException;
-
 public class DefaultCommandVisitor implements CommandVisitor {
     @Override
     public Response visit(CreateUserCommand command) {
 
         try (var dao = new UserDao()) {
-            var userId = dao.createUser(command.email(), command.password(), command.roles());
+            var userId = dao.createUser(command.email(), command.passwordHash(), command.roles());
             return new CreateUserCommandResponse(userId);
         } catch (UserAlreadyExistsException e) {
             return new CreateUserCommandResponse(-1);

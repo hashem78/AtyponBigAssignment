@@ -1,5 +1,7 @@
 package com.hashem.p1;
 
+import org.apache.commons.codec.digest.DigestUtils;
+
 import java.io.IOException;
 import java.sql.SQLException;
 import javax.servlet.ServletException;
@@ -29,14 +31,14 @@ public class LoginServlet extends HttpServlet {
         String password = request.getParameter("password");
 
         try (var userDao = new UserDao()) {
-            var user = userDao.getByEmailAndPassword(email, password);
+            var user = userDao.getByEmailAndPassword(email, DigestUtils.sha256Hex(password));
             request.getSession().setAttribute("userEmail", email);
             request.getSession().setAttribute("userId", user.id());
             System.out.println(user);
             var dispatcher = request.getRequestDispatcher("/MainServlet");
             dispatcher.forward(request, response);
         } catch (UserDoesNotExistException e) {
-            request.setAttribute("errorMessage","Invalid email or password");
+            request.setAttribute("errorMessage","Invalid email or passwordHash");
             var dispatcher = request.getRequestDispatcher("/index.jsp");
             dispatcher.forward(request, response);
         } catch (Exception e) {

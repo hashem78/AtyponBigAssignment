@@ -1,4 +1,4 @@
-CREATE DATABASE IF NOT EXISTS dbo;
+# CREATE DATABASE IF NOT EXISTS dbo;
 
 USE dbo;
 
@@ -6,7 +6,7 @@ CREATE TABLE Users
 (
     id       INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
     email    VARCHAR(100) UNIQUE,
-    password VARCHAR(100)
+    passwordHash VARCHAR(100)
 );
 
 CREATE TABLE Roles

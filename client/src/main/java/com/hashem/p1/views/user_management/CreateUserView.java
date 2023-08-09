@@ -6,6 +6,7 @@ import com.hashem.p1.context.Context;
 import com.hashem.p1.responses.users.CreateUserCommandResponse;
 import com.hashem.p1.views.core.View;
 import de.vandermeer.asciitable.AsciiTable;
+import org.apache.commons.codec.digest.DigestUtils;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -19,9 +20,11 @@ public class CreateUserView implements View {
         System.out.print("Enter password: ");
         var password = scanner.next();
 
+        String passwordHash = DigestUtils.sha256Hex(password);
+
         var response = HttpClient.sendRequest(
                 CreateUserCommandResponse.class,
-                new CreateUserCommand(email, password, new ArrayList<>())
+                new CreateUserCommand(email, passwordHash, new ArrayList<>())
         );
 
         if (response.id() == -1) {
@@ -31,9 +34,9 @@ public class CreateUserView implements View {
 
         var table = new AsciiTable();
         table.addRule();
-        table.addRow("Id", "Email", "Password");
+        table.addRow("Id", "Email");
         table.addRule();
-        table.addRow(response.id(), email, password);
+        table.addRow(response.id(), email);
         table.addRule();
     }
 }

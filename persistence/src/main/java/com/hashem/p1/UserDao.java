@@ -19,7 +19,7 @@ public class UserDao implements AutoCloseable {
             throw new UserDoesNotExistException();
 
         var sqlQuery = """
-                SELECT u.id as user_id, u.email, u.password, r.id as role_id, r.name as role_name
+                SELECT u.id as user_id, u.email, u.passwordHash, r.id as role_id, r.name as role_name
                 FROM Users u
                          JOIN UserRoles ur ON u.id = ur.user_id
                          JOIN Roles r ON ur.role_id = r.id
@@ -32,7 +32,7 @@ public class UserDao implements AutoCloseable {
     public Set<User> getUsers() throws SQLException {
 
         var sqlQuery = """
-                SELECT u.id as user_id, u.email, u.password, r.id as role_id, r.name as role_name
+                SELECT u.id as user_id, u.email, u.passwordHash, r.id as role_id, r.name as role_name
                 FROM Users u
                          LEFT JOIN UserRoles ur ON u.id = ur.user_id
                          LEFT JOIN Roles r ON ur.role_id = r.id""";
@@ -50,7 +50,7 @@ public class UserDao implements AutoCloseable {
                 var user = User.builder()
                         .id(userId)
                         .email(resultSet.getString("email"))
-                        .password(resultSet.getString("password"));
+                        .passwordHash(resultSet.getString("passwordHash"));
 
                 userMap.put(userId, user);
             }
@@ -72,17 +72,17 @@ public class UserDao implements AutoCloseable {
         return users;
     }
 
-    public int createUser(String email, String password, List<Role> roles) throws SQLException, UserAlreadyExistsException {
+    public int createUser(String email, String passwordHash, List<Role> roles) throws SQLException, UserAlreadyExistsException {
 
         if (userExists(email)) throw new UserAlreadyExistsException();
 
         db.setAutoCommit(false);
         var success = true;
-        var userSql = "insert into Users (id,email,password) value (default, ?, ?)";
+        var userSql = "insert into Users (id,email,passwordHash) value (default, ?, ?)";
         var userStatement = db.prepareStatement(userSql, Statement.RETURN_GENERATED_KEYS);
 
         userStatement.setString(1, email);
-        userStatement.setString(2, password);
+        userStatement.setString(2, passwordHash);
         var affectedRows = userStatement.executeUpdate();
         success = affectedRows > 0;
 
@@ -108,10 +108,10 @@ public class UserDao implements AutoCloseable {
 
         if (!userExists(user.id())) throw new UserDoesNotExistException();
 
-        var query = "UPDATE Users set email = ?, password = ? where id = ?";
+        var query = "UPDATE Users set email = ?, passwordHash = ? where id = ?";
         var statement = db.prepareStatement(query);
         statement.setString(1, user.email());
-        statement.setString(2, user.password());
+        statement.setString(2, user.passwordHash());
         statement.setInt(3, user.id());
 
         return statement.executeUpdate() > 0;
@@ -127,12 +127,12 @@ public class UserDao implements AutoCloseable {
         return statement.executeUpdate() > 0;
     }
 
-    boolean userExists(String email, String password) throws SQLException {
-        String userExistsQuery = "SELECT EXISTS(SELECT 1 FROM Users WHERE email = ? and password = ?)";
+    boolean userExists(String email, String passwordHash) throws SQLException {
+        String userExistsQuery = "SELECT EXISTS(SELECT 1 FROM Users WHERE email = ? and passwordHash = ?)";
 
         var preparedStatement = db.prepareStatement(userExistsQuery);
         preparedStatement.setString(1, email);
-        preparedStatement.setString(2, password);
+        preparedStatement.setString(2, passwordHash);
         var resultSet = preparedStatement.executeQuery();
 
         if (resultSet.next()) {
@@ -167,21 +167,21 @@ public class UserDao implements AutoCloseable {
         return false;
     }
 
-    public User getByEmailAndPassword(String email, String password) throws SQLException, UserDoesNotExistException {
-        if (!userExists(email, password))
+    public User getByEmailAndPassword(String email, String passwordHash) throws SQLException, UserDoesNotExistException {
+        if (!userExists(email, passwordHash))
             throw new UserDoesNotExistException();
 
         var sqlQuery = """
-                SELECT u.id as user_id, u.email, u.password, r.id as role_id, r.name as role_name
+                SELECT u.id as user_id, u.email, u.passwordHash, r.id as role_id, r.name as role_name
                 FROM Users u
                          JOIN UserRoles ur ON u.id = ur.user_id
                          JOIN Roles r ON ur.role_id = r.id
-                where (email = ? and password = ?)""";
+                where (email = ? and passwordHash = ?)""";
 
 
         var statement = db.prepareStatement(sqlQuery);
         statement.setString(1, email);
-        statement.setString(2, password);
+        statement.setString(2, passwordHash);
 
         return getUser(statement.executeQuery());
     }
@@ -203,7 +203,7 @@ public class UserDao implements AutoCloseable {
             userBuilder
                     .id(resultSet.getInt("user_id"))
                     .email(resultSet.getString("email"))
-                    .password(resultSet.getString("password"));
+                    .passwordHash(resultSet.getString("passwordHash"));
         }
 
         return userBuilder

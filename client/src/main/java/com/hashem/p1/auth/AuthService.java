@@ -20,8 +20,8 @@ public class AuthService {
         user = null;
     }
 
-    public void loginWithEmailAndPassword(String email, String password) throws SQLException, UserDoesNotExistException {
-        user = userDao.getByEmailAndPassword(email, password);
+    public void loginWithEmailAndPassword(String email, String passwordHash) throws SQLException, UserDoesNotExistException {
+        user = userDao.getByEmailAndPassword(email, passwordHash);
     }
 
     public User getUser() {

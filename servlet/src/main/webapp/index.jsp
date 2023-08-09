@@ -80,7 +80,7 @@
     const em = "<%= errorMessage%>";
     console.log(em)
     if (em !== "null") {
-        alert("Wrong email or password")
+        alert("Wrong email or passwordHash")
     }
 </script>
 </html>

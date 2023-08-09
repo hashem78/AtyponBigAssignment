@@ -26,7 +26,7 @@ public class Helpers {
                     .map(Role::name)
                     .collect(Collectors.joining(", "));
 
-            table.addRow(user.id(), user.email(), user.password(), roles);
+            table.addRow(user.id(), user.email(), user.passwordHash(), roles);
             table.addRule();
         });
 
@@ -44,7 +44,7 @@ public class Helpers {
                 .map(Role::name)
                 .collect(Collectors.joining(", "));
 
-        table.addRow(user.id(), user.email(), user.password(), roles);
+        table.addRow(user.id(), user.email(), user.passwordHash(), roles);
 
         table.addRule();
         System.out.println(table.render());

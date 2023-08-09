@@ -4,7 +4,6 @@ import com.hashem.p1.interfaces.Root;
 import lombok.Builder;
 import lombok.With;
 
-import java.util.List;
 import java.util.Set;
 
 @Builder
@@ -12,7 +11,7 @@ import java.util.Set;
 public record User(
         int id,
         String email,
-        String password,
+        String passwordHash,
         Set<Role> roles) implements Root {
 
     public boolean hasRole(String name) {

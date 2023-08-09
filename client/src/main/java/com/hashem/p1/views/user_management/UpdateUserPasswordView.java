@@ -20,12 +20,12 @@ public class UpdateUserPasswordView implements View {
         var scanner = new Scanner(System.in);
         Helpers.displayUser(user);
 
-        System.out.print("Enter new password: ");
+        System.out.print("Enter new passwordHash: ");
         var password = scanner.next();
 
         var response = HttpClient.sendRequest(
                 UpdateUserCommandResponse.class,
-                new UpdateUserCommand(user.withPassword(password)));
+                new UpdateUserCommand(user.withPasswordHash(password)));
 
         if (response.success())
             System.out.println("Update Successful");
