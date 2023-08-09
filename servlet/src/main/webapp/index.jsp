@@ -45,18 +45,13 @@
         margin: 20px;
     }
 
-    .alert {
-        margin-bottom: -30px;
-        font-size: 13px;
-        margin-top: 20px;
-    }
 </style>
 <body>
 
 <div class="global-container">
     <div class="card login-form">
         <div class="card-body">
-            <h3 class="card-title text-center"> Boostrap 4 Login Form Example </h3>
+            <h3 class="card-title text-center"> Login </h3>
             <div class="card-text">
                 <form action="LoginServlet" method="post">
                     <div class="form-group">
@@ -85,7 +80,7 @@
     const em = "<%= errorMessage%>";
     console.log(em)
     if (em !== "null") {
-        alert("Fuck you")
+        alert("Wrong email or password")
     }
 </script>
 </html>

@@ -1,6 +1,7 @@
 package com.hashem.p1;
 
 import com.hashem.p1.models.CClass;
+import com.hashem.p1.models.ClassStatistics;
 import com.hashem.p1.models.Role;
 import com.hashem.p1.models.User;
 
@@ -8,9 +9,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class ClassDao implements AutoCloseable {
 
@@ -43,6 +42,67 @@ public class ClassDao implements AutoCloseable {
         var statement = db.prepareStatement(sqlQuery);
         var resultSet = statement.executeQuery();
         return extractClassesFromResultSet(resultSet);
+    }
+
+    public ClassStatistics getClassStatistics(int id) throws ClassDoesNotExistException, SQLException {
+        if (!classExists(id)) throw new ClassDoesNotExistException();
+        var sqlQuery = """
+                WITH GradeRanks AS (
+                    SELECT grade,
+                           PERCENT_RANK() OVER (ORDER BY grade) AS percentile
+                    FROM Grades
+                    WHERE class_id = ?
+                )
+                                
+                SELECT
+                    AVG(grade) AS AverageGrade,
+                    MAX(grade) AS HighestGrade,
+                    MIN(grade) AS LowestGrade,
+                    (
+                        SELECT AVG(grade)
+                        FROM GradeRanks
+                        WHERE percentile BETWEEN 0.49 AND 0.51
+                    ) AS MedianGrade,
+                    STDDEV(grade) AS StandardDeviation,
+                    VARIANCE(grade) AS Variance,
+                    (MAX(grade) - MIN(grade)) AS GradeRange,
+                    (
+                        SELECT grade
+                        FROM (
+                                 SELECT grade, COUNT(*) as frequency
+                                 FROM Grades
+                                 WHERE class_id = ?
+                                 GROUP BY grade
+                                 ORDER BY frequency DESC, grade ASC
+                                 LIMIT 1
+                             ) as ModeSubquery
+                    ) AS Mode
+                FROM Grades
+                WHERE class_id = ?;
+                """;
+        var statement = db.prepareStatement(sqlQuery);
+        statement.setInt(1, id);
+        statement.setInt(2, id);
+        statement.setInt(3, id);
+        var resultSet = statement.executeQuery();
+        var stats = new ArrayList<ClassStatistics>();
+
+        if (resultSet.next()) {
+
+            return new ClassStatistics(
+                    resultSet.getFloat("AverageGrade"),
+                    resultSet.getFloat("HighestGrade"),
+                    resultSet.getFloat("LowestGrade"),
+                    resultSet.getFloat("StandardDeviation"),
+                    resultSet.getFloat("Variance"),
+                    resultSet.getFloat("GradeRange"),
+                    resultSet.getFloat("MedianGrade"),
+                    resultSet.getFloat("Mode")
+
+            );
+        }
+
+        return new ClassStatistics();
     }
 
     public Set<CClass> getClasses(int id) throws Exception {
