@@ -1,5 +1,6 @@
 package com.hashem.p1;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hashem.p1.models.CClass;
 import com.hashem.p1.models.Grade;
 import com.hashem.p1.models.Role;
@@ -11,18 +12,28 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @WebServlet(name = "MainServlet", urlPatterns = {"/"})
 public class MainServlet extends HttpServlet {
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
-        var loggedInUser = (User) req.getSession().getAttribute("user");
+        var objectMapper = new ObjectMapper();
+        var cookieOptional = Arrays.stream(req.getCookies())
+                .filter(x -> Objects.equals(x.getName(), "user"))
+                .findFirst();
+
+        if (cookieOptional.isEmpty()) {
+            System.out.println("Cookie not found redirecting");
+            resp.sendRedirect(req.getContextPath() + "/");
+            return;
+        }
+
+        var loggedInUser = objectMapper.readValue(Base64.getDecoder().decode(cookieOptional.get().getValue()), User.class);
         var loggedInUserRoles = loggedInUser.roles().stream()
                 .map(Role::name)
                 .collect(Collectors.joining(", "));

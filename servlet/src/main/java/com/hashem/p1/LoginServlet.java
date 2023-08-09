@@ -1,11 +1,14 @@
 package com.hashem.p1;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Base64;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,23 +26,26 @@ public class LoginServlet extends HttpServlet {
         }
     }
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
 
-        String email = request.getParameter("email");
-        String password = request.getParameter("password");
+        String email = req.getParameter("email");
+        String password = req.getParameter("password");
 
         try (var userDao = new UserDao()) {
             var user = userDao.getByEmailAndPassword(email, DigestUtils.sha256Hex(password));
-            request.getSession().setAttribute("user", user);
-            System.out.println(user);
-            var dispatcher = request.getRequestDispatcher("/MainServlet");
-            dispatcher.forward(request, response);
+            var objectMapper = new ObjectMapper();
+            req.getSession().setAttribute("user", user);
+            var loginCookie = new Cookie("user", Base64.getEncoder().encodeToString(objectMapper.writeValueAsString(user).getBytes()));
+            System.out.println(loginCookie.getValue());
+            loginCookie.setMaxAge(1);
+            resp.addCookie(loginCookie);
+            resp.sendRedirect(req.getContextPath() +"/MainServlet");
         } catch (UserDoesNotExistException e) {
-            request.setAttribute("errorMessage","Invalid email or passwordHash");
-            var dispatcher = request.getRequestDispatcher("/index.jsp");
-            dispatcher.forward(request, response);
+            req.setAttribute("errorMessage", "Invalid email or passwordHash");
+            var dispatcher = req.getRequestDispatcher("/index.jsp");
+            dispatcher.forward(req, resp);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
