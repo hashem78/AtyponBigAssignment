@@ -39,7 +39,7 @@ public class LoginServlet extends HttpServlet {
             req.getSession().setAttribute("user", user);
             var loginCookie = new Cookie("user", Base64.getEncoder().encodeToString(objectMapper.writeValueAsString(user).getBytes()));
             System.out.println(loginCookie.getValue());
-            loginCookie.setMaxAge(1);
+            loginCookie.setMaxAge(30 * 60);
             resp.addCookie(loginCookie);
             resp.sendRedirect(req.getContextPath() +"/MainServlet");
         } catch (UserDoesNotExistException e) {

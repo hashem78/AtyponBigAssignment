@@ -8,6 +8,13 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
     <title>Login</title>
+    <SCRIPT type="text/javascript">
+        window.history.forward();
+
+        function noBack() {
+            window.history.forward();
+        }
+    </SCRIPT>
 </head>
 <style>
     html {
@@ -47,7 +54,8 @@
 
 </style>
 <body>
-
+<BODY onload="noBack();"
+      onpageshow="if (event.persisted) noBack();" onunload=""></BODY>
 <div class="global-container">
     <div class="card login-form">
         <div class="card-body">
@@ -61,7 +69,8 @@
                     </div>
                     <div class="form-group">
                         <label for="exampleInputPassword1">Enter Password </label>
-                        <input type="password" name="password" class="form-control form-control-sm" id="exampleInputPassword1">
+                        <input type="password" name="password" class="form-control form-control-sm"
+                               id="exampleInputPassword1">
                     </div>
                     <button type="submit" class="btn btn-primary btn-block">Sign in</button>
                 </form>

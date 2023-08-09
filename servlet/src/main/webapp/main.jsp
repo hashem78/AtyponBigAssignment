@@ -1,4 +1,5 @@
-<%@ page import="com.hashem.p1.models.ClassStatistics" %><%--
+<%@ page import="com.hashem.p1.models.ClassStatistics" %>
+<%@ page import="com.hashem.p1.models.User" %><%--
   Created by IntelliJ IDEA.
   User: mythi
   Date: 8/6/23
@@ -17,12 +18,41 @@
           integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
     <title>Title</title>
 </head>
-<body>
+<SCRIPT type="text/javascript">
+    window.history.forward();
 
+    function noBack() {
+        window.history.forward();
+    }
+</SCRIPT>
+<body>
+<BODY onload="noBack();"
+      onpageshow="if (event.persisted) noBack();" onunload=""></BODY>
 <%--@elvariable id="classGradesPairs" type="java.util.List<com.hashem.p1.MainViewModel>"--%>
 <%--@elvariable id="grade" type="com.hashem.p1.models.Grade"--%>
 <%--@elvariable id="user" type="com.hashem.p1.models.User"--%>
 <%--@elvariable id="loggedInUserRoles" type="java.lang.String"--%>
+
+<%
+    boolean cookieFound = false;
+    Cookie[] cookies = request.getCookies();
+    if (cookies != null) {
+        for (Cookie cookie : cookies) {
+            if (cookie.getName().equals("user")) {
+                cookieFound = true;
+                break;
+            }
+        }
+    }
+
+    System.out.println("COOOKIEE: " + cookieFound);
+
+    if (session.getAttribute("user") == null) {
+        response.sendRedirect(request.getContextPath() + "/");
+    } else if (!cookieFound) {
+        response.sendRedirect(request.getContextPath() + "/");
+    }
+%>
 
 <style>
     .container {
@@ -36,6 +66,9 @@
 
 <div class="container">
     Classes for ${user.email()} (${loggedInUserRoles})
+    <form action="LogoutServlet" method="post">
+        <input class="btn btn-primary btn-block" type="submit" value="Logout">
+    </form>
 </div>
 
 <c:forEach items="${classGradesPairs}" var="model">
