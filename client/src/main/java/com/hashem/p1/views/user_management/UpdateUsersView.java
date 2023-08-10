@@ -40,7 +40,7 @@ public class UpdateUsersView implements View {
 
         var viewProperties = new ArrayList<ViewProperties>() {{
             add(new ViewProperties("update_user_email", "Update the User's email"));
-            add(new ViewProperties("update_user_password", "Update the User's passwordHash"));
+            add(new ViewProperties("update_user_password", "Update the User's password"));
             add(new ViewProperties("update_user_roles", "Update the User's roles"));
             add(new ViewProperties("delete_user", "Delete the User"));
         }};

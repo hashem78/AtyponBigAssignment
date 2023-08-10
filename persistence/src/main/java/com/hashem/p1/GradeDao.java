@@ -17,7 +17,7 @@ public class GradeDao implements AutoCloseable {
 
     public boolean createGrade(int classId, int userId, float grade) throws SQLException {
 
-        String sql = "insert into Grades (id,class_id,user_id,grade) value (default,?,?,?);";
+        String sql = "insert into grades (id,class_id,user_id,grade) value (default,?,?,?);";
 
         var statement = db.prepareStatement(sql);
         statement.setInt(1, classId);
@@ -28,7 +28,7 @@ public class GradeDao implements AutoCloseable {
     }
 
     public boolean deleteGrade(int gradeId, int classId, int userId) throws SQLException {
-        String sql = "delete from Grades where id = ? and class_id = ? and user_id = ?";
+        String sql = "delete from grades where id = ? and class_id = ? and user_id = ?";
 
         var statement = db.prepareStatement(sql);
         statement.setInt(1, gradeId);
@@ -39,7 +39,7 @@ public class GradeDao implements AutoCloseable {
     }
 
     public boolean updateGrade(int gradeId, int classId, int userId, float newGrade) throws SQLException {
-        String sql = "update Grades set grade = ? where id = ? and class_id = ? and user_id = ?";
+        String sql = "update grades set grade = ? where id = ? and class_id = ? and user_id = ?";
 
         var statement = db.prepareStatement(sql);
         statement.setInt(1, gradeId);
@@ -53,17 +53,17 @@ public class GradeDao implements AutoCloseable {
     public List<Grade> getGrades(int classId, int userId) throws SQLException {
         String sql = """
                 SELECT
-                    Grades.id,
-                    Users.email,
-                    COALESCE(Grades.grade, 0) AS grade
+                    grades.id,
+                    users.email,
+                    COALESCE(grades.grade, 0) AS grade
                 FROM
-                       Users
+                       users
                 LEFT JOIN
-                    Grades ON Users.id = Grades.user_id
+                    grades ON users.id = grades.user_id
                 LEFT JOIN
-                    Classes ON Grades.class_id = Classes.id
+                    classes ON grades.class_id = classes.id
                 WHERE
-                    Classes.id = ? AND Users.id = ?;
+                    classes.id = ? AND users.id = ?;
                 """;
 
         var statement = db.prepareStatement(sql);

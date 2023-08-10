@@ -2,50 +2,50 @@
 
 USE dbo;
 
-CREATE TABLE Users
+CREATE TABLE users
 (
-    id       INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
-    email    VARCHAR(100) UNIQUE,
-    passwordHash VARCHAR(100)
+    id       BIGINT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    email    VARCHAR(255) UNIQUE,
+    password_hash VARCHAR(255)
 );
 
-CREATE TABLE Roles
+CREATE TABLE roles
 (
-    id   INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
-    name VARCHAR(100)
+    id   BIGINT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    name VARCHAR(255)
 );
 
-CREATE TABLE UserRoles
+CREATE TABLE user_roles
 (
-    user_id INT NOT NULL,
-    role_id INT NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES Users (id) ON DELETE CASCADE,
-    FOREIGN KEY (role_id) REFERENCES Roles (id) ON DELETE CASCADE,
+    user_id BIGINT NOT NULL,
+    role_id BIGINT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
+    FOREIGN KEY (role_id) REFERENCES roles (id) ON DELETE CASCADE,
     PRIMARY KEY (user_id, role_id)
 );
 
 
-CREATE TABLE Classes
+CREATE TABLE classes
 (
-    id      INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
-    name    varchar(100) not null unique
+    id      BIGINT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    name    varchar(255) not null unique
 );
 
-CREATE TABLE Grades
+CREATE TABLE grades
 (
-    id        INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
-    user_id   INT NOT NULL,
-    class_id  INT NOT NULL,
+    id        BIGINT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    user_id   BIGINT NOT NULL,
+    class_id  BIGINT NOT NULL,
     grade     FLOAT,
-    FOREIGN KEY (user_id) REFERENCES Users (id) ON DELETE CASCADE,
-    FOREIGN KEY (class_id) REFERENCES Classes (id) ON DELETE CASCADE
+    FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
+    FOREIGN KEY (class_id) REFERENCES classes (id) ON DELETE CASCADE
 );
 
-CREATE TABLE UserClasses
+CREATE TABLE user_classes
 (
-    user_id INT NOT NULL,
-    class_id INT NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES Users (id) ON DELETE CASCADE,
-    FOREIGN KEY (class_id) REFERENCES Classes (id) ON DELETE CASCADE,
+    user_id BIGINT NOT NULL,
+    class_id BIGINT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
+    FOREIGN KEY (class_id) REFERENCES classes (id) ON DELETE CASCADE,
     PRIMARY KEY (user_id, class_id)
 );

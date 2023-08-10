@@ -19,7 +19,7 @@ public class RoleDao implements AutoCloseable {
 
     public Set<Role> getAllRoles() throws SQLException {
 
-        var sqlQuery = "select * from Roles";
+        var sqlQuery = "select * from roles";
         var statement = db.createStatement();
         var resultSet = statement.executeQuery(sqlQuery);
         var roles = new HashSet<Role>();
@@ -38,7 +38,7 @@ public class RoleDao implements AutoCloseable {
 
         if (roleExists(roleName)) throw new RoleAlreadyExistsException();
 
-        var sqlQuery = "insert into Roles (id,name) value (default, ?)";
+        var sqlQuery = "insert into roles (id,name) value (default, ?)";
         var statement = db.prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS);
         statement.setString(1, roleName);
         statement.executeUpdate();
@@ -52,7 +52,7 @@ public class RoleDao implements AutoCloseable {
     }
 
     boolean roleExists(String name) throws SQLException {
-        String roleExistsQuery = "SELECT EXISTS(SELECT 1 FROM Roles WHERE name = ?)";
+        String roleExistsQuery = "SELECT EXISTS(SELECT 1 FROM roles WHERE name = ?)";
 
         var preparedStatement = db.prepareStatement(roleExistsQuery);
         preparedStatement.setString(1, name);
@@ -65,7 +65,7 @@ public class RoleDao implements AutoCloseable {
     }
 
     boolean roleExists(int id) throws SQLException {
-        String roleExistsQuery = "SELECT EXISTS(SELECT 1 FROM Roles WHERE id = ?)";
+        String roleExistsQuery = "SELECT EXISTS(SELECT 1 FROM roles WHERE id = ?)";
 
         var preparedStatement = db.prepareStatement(roleExistsQuery);
         preparedStatement.setInt(1, id);
@@ -81,7 +81,7 @@ public class RoleDao implements AutoCloseable {
 
         if (!roleExists(id)) throw new RoleDoesNotExistException();
 
-        var sqlQuery = "update Roles set name = ? where id = ?";
+        var sqlQuery = "update roles set name = ? where id = ?";
         var statement = db.prepareStatement(sqlQuery);
         statement.setString(1, newRoleName);
         statement.setInt(2, id);
@@ -93,7 +93,7 @@ public class RoleDao implements AutoCloseable {
 
         if (!roleExists(roleName)) throw new RoleDoesNotExistException();
 
-        var sqlQuery = "delete from Roles where name = ?";
+        var sqlQuery = "delete from roles where name = ?";
         var statement = db.prepareStatement(sqlQuery);
         statement.setString(1, roleName);
 
@@ -104,7 +104,7 @@ public class RoleDao implements AutoCloseable {
 
         if (!roleExists(id)) throw new RoleDoesNotExistException();
 
-        var sqlQuery = "delete from Roles where id = ?";
+        var sqlQuery = "delete from roles where id = ?";
         var statement = db.prepareStatement(sqlQuery);
         statement.setInt(1, id);
 
@@ -115,7 +115,7 @@ public class RoleDao implements AutoCloseable {
 
         if (!roleExists(id)) throw new RoleDoesNotExistException();
 
-        var sqlQuery = "select name from Roles where id = ?";
+        var sqlQuery = "select name from roles where id = ?";
         var statement = db.prepareStatement(sqlQuery);
         statement.setInt(1, id);
 
@@ -132,10 +132,10 @@ public class RoleDao implements AutoCloseable {
         if (!roleExists(id)) throw new RoleDoesNotExistException();
 
         var sqlQuery = """
-                SELECT Users.id
-                FROM UserRoles
-                         JOIN Users ON UserRoles.user_id = Users.id
-                WHERE UserRoles.role_id = ?;
+                SELECT users.id
+                FROM user_roles
+                         JOIN users ON user_roles.user_id = users.id
+                WHERE user_roles.role_id = ?;
                 """;
         var statement = db.prepareStatement(sqlQuery);
         var resultSet = statement.executeQuery();
@@ -148,7 +148,7 @@ public class RoleDao implements AutoCloseable {
 
     boolean relationshipExists(int userId, int roleId) throws SQLException {
 
-        String query = "SELECT EXISTS(SELECT 1 FROM UserRoles WHERE user_id = ? and role_id = ?)";
+        String query = "SELECT EXISTS(SELECT 1 FROM user_roles WHERE user_id = ? and role_id = ?)";
 
         var preparedStatement = db.prepareStatement(query);
         preparedStatement.setInt(1, userId);
@@ -166,7 +166,7 @@ public class RoleDao implements AutoCloseable {
         if (!roleExists(roleId)) throw new RoleDoesNotExistException();
         if (relationshipExists(userId, roleId)) throw new RelationshipAlreadyExists();
 
-        var query = "insert into UserRoles (user_id, role_id) value (?,?)";
+        var query = "insert into user_roles (user_id, role_id) value (?,?)";
         var statement = db.prepareStatement(query);
         statement.setInt(1, userId);
         statement.setInt(2, roleId);
@@ -179,7 +179,7 @@ public class RoleDao implements AutoCloseable {
         if (!roleExists(roleId)) throw new RoleDoesNotExistException();
         if (!relationshipExists(userId, roleId)) throw new RelationshipDoesNotExist();
 
-        var query = "delete from UserRoles where user_id = ? and role_id = ?";
+        var query = "delete from user_roles where user_id = ? and role_id = ?";
         var statement = db.prepareStatement(query);
         statement.setInt(1, userId);
         statement.setInt(2, roleId);

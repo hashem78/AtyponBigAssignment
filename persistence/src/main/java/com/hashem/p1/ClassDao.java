@@ -22,26 +22,26 @@ public class ClassDao implements AutoCloseable {
     public Set<CClass> getClasses() throws Exception {
         var sqlQuery = """
                 SELECT
-                    Classes.id AS class_id,
-                    Classes.name AS class_name,
-                    Users.id AS user_id,
-                    Users.email,
-                    Roles.name AS role_name,
-                    Roles.id as role_id
+                    classes.id AS class_id,
+                    classes.name AS class_name,
+                    users.id AS user_id,
+                    users.email,
+                    roles.name AS role_name,
+                    roles.id as role_id
                 FROM
-                    Classes
+                    classes
                         LEFT JOIN
-                    UserClasses ON Classes.id = UserClasses.class_id
+                    user_classes ON classes.id = user_classes.class_id
                         LEFT JOIN
-                    Users ON UserClasses.user_id = Users.id
+                    users ON user_classes.user_id = users.id
                         LEFT JOIN
-                    UserRoles ON Users.id = UserRoles.user_id
+                    user_roles ON users.id = user_roles.user_id
                         LEFT JOIN
-                    Roles ON UserRoles.role_id = Roles.id;
+                    roles ON user_roles.role_id = roles.id;
                 """;
         var statement = db.prepareStatement(sqlQuery);
         var resultSet = statement.executeQuery();
-        return extractClassesFromResultSet(resultSet);
+        return extractclassesFromResultSet(resultSet);
     }
 
     public ClassStatistics getClassStatistics(int id) throws ClassDoesNotExistException, SQLException {
@@ -50,7 +50,7 @@ public class ClassDao implements AutoCloseable {
                 WITH GradeRanks AS (
                     SELECT grade,
                            PERCENT_RANK() OVER (ORDER BY grade) AS percentile
-                    FROM Grades
+                    FROM grades
                     WHERE class_id = ?
                 )
                                 
@@ -70,14 +70,14 @@ public class ClassDao implements AutoCloseable {
                         SELECT grade
                         FROM (
                                  SELECT grade, COUNT(*) as frequency
-                                 FROM Grades
+                                 FROM grades
                                  WHERE class_id = ?
                                  GROUP BY grade
                                  ORDER BY frequency DESC, grade ASC
                                  LIMIT 1
                              ) as ModeSubquery
                     ) AS Mode
-                FROM Grades
+                FROM grades
                 WHERE class_id = ?;
                 """;
         var statement = db.prepareStatement(sqlQuery);
@@ -108,28 +108,28 @@ public class ClassDao implements AutoCloseable {
     public Set<CClass> getClasses(int id) throws Exception {
         var sqlQuery = """
                 SELECT
-                    Classes.id AS class_id,
-                    Classes.name AS class_name,
-                    Users.id AS user_id,
-                    Users.email,
-                    Roles.name AS role_name,
-                    Roles.id as role_id
+                    classes.id AS class_id,
+                    classes.name AS class_name,
+                    users.id AS user_id,
+                    users.email,
+                    roles.name AS role_name,
+                    roles.id as role_id
                 FROM
-                    Classes
+                    classes
                 LEFT JOIN
-                    UserClasses ON Classes.id = UserClasses.class_id
+                    user_classes ON classes.id = user_classes.class_id
                 LEFT JOIN
-                    Users ON UserClasses.user_id = Users.id
+                    users ON user_classes.user_id = users.id
                 LEFT JOIN
-                    UserRoles ON Users.id = UserRoles.user_id
+                    user_roles ON users.id = user_roles.user_id
                 LEFT JOIN
-                    Roles ON UserRoles.role_id = Roles.id
+                    roles ON user_roles.role_id = roles.id
                 WHERE
-                    Classes.id IN (
+                    classes.id IN (
                         SELECT
                             class_id
                         FROM
-                            UserClasses
+                            user_classes
                         WHERE
                             user_id = ?
                     );
@@ -138,10 +138,10 @@ public class ClassDao implements AutoCloseable {
         statement.setInt(1, id);
         var resultSet = statement.executeQuery();
 
-        return extractClassesFromResultSet(resultSet);
+        return extractclassesFromResultSet(resultSet);
     }
 
-    private Set<CClass> extractClassesFromResultSet(ResultSet resultSet) throws SQLException {
+    private Set<CClass> extractclassesFromResultSet(ResultSet resultSet) throws SQLException {
         var classesMap = new HashMap<Integer, CClass>();
         var usersMap = new HashMap<Integer, User>();
         while (resultSet.next()) {
@@ -173,7 +173,7 @@ public class ClassDao implements AutoCloseable {
 
         if (!classExists(id)) throw new ClassDoesNotExistException();
 
-        var sqlQuery = "update Classes set name = ? where id = ?";
+        var sqlQuery = "update classes set name = ? where id = ?";
         var statement = db.prepareStatement(sqlQuery);
         statement.setString(1, newClassName);
         statement.setInt(2, id);
@@ -186,7 +186,7 @@ public class ClassDao implements AutoCloseable {
         db.setAutoCommit(false);
         if (classExists(name)) throw new ClassAlreadyExistsException();
 
-        var createClassQuery = "insert into Classes (id,name) value (default, ?)";
+        var createClassQuery = "insert into classes (id,name) value (default, ?)";
         var createClassStatement = db.prepareStatement(
                 createClassQuery, Statement.RETURN_GENERATED_KEYS);
         createClassStatement.setString(1, name);
@@ -196,7 +196,7 @@ public class ClassDao implements AutoCloseable {
         if (!generatedKeys.next())
             throw new SQLException("Creating class failed, no ID obtained.");
 
-        var insertUserQuery = "insert into UserClasses (user_id, class_id) value (?,?)";
+        var insertUserQuery = "insert into user_classes (user_id, class_id) value (?,?)";
         var insertUserQueryStatement = db.prepareStatement(insertUserQuery);
         insertUserQueryStatement.setInt(1, creatorId);
         insertUserQueryStatement.setInt(2, generatedKeys.getInt(1));
@@ -212,7 +212,7 @@ public class ClassDao implements AutoCloseable {
 
         if (!classExists(id)) throw new ClassDoesNotExistException();
 
-        var sqlQuery = "delete from Classes where id = ?";
+        var sqlQuery = "delete from classes where id = ?";
         var statement = db.prepareStatement(sqlQuery);
         statement.setInt(1, id);
 
@@ -221,7 +221,7 @@ public class ClassDao implements AutoCloseable {
 
 
     boolean classExists(String name) throws SQLException {
-        String classExistsQuery = "SELECT EXISTS(SELECT 1 FROM Classes WHERE name = ?)";
+        String classExistsQuery = "SELECT EXISTS(SELECT 1 FROM classes WHERE name = ?)";
 
         var preparedStatement = db.prepareStatement(classExistsQuery);
         preparedStatement.setString(1, name);
@@ -234,7 +234,7 @@ public class ClassDao implements AutoCloseable {
     }
 
     boolean classExists(int id) throws SQLException {
-        String classExistsQuery = "SELECT EXISTS(SELECT 1 FROM Classes WHERE id = ?)";
+        String classExistsQuery = "SELECT EXISTS(SELECT 1 FROM classes WHERE id = ?)";
 
         var preparedStatement = db.prepareStatement(classExistsQuery);
         preparedStatement.setInt(1, id);

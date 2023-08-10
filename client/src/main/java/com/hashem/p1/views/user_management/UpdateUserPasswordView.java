@@ -7,6 +7,7 @@ import com.hashem.p1.models.User;
 import com.hashem.p1.responses.users.UpdateUserCommandResponse;
 import com.hashem.p1.views.Helpers;
 import com.hashem.p1.views.core.View;
+import org.apache.commons.codec.digest.DigestUtils;
 
 import java.util.Scanner;
 
@@ -25,7 +26,7 @@ public class UpdateUserPasswordView implements View {
 
         var response = HttpClient.sendRequest(
                 UpdateUserCommandResponse.class,
-                new UpdateUserCommand(user.withPasswordHash(password)));
+                new UpdateUserCommand(user.withPasswordHash(DigestUtils.sha256Hex(password))));
 
         if (response.success())
             System.out.println("Update Successful");
