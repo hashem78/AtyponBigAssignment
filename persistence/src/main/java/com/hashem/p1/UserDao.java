@@ -50,7 +50,8 @@ public class UserDao implements AutoCloseable {
                 var user = User.builder()
                         .id(userId)
                         .email(resultSet.getString("email"))
-                        .passwordHash(resultSet.getString("passwordHash"));
+                        .passwordHash(resultSet.getString("password_hash" +
+                                ""));
 
                 userMap.put(userId, user);
             }
