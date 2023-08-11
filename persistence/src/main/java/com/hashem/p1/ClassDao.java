@@ -141,6 +141,41 @@ public class ClassDao implements AutoCloseable {
         return extractclassesFromResultSet(resultSet);
     }
 
+    public Set<User> getUsersForClass(int classId) throws SQLException {
+        String query = """
+                SELECT users.id AS user_id, users.email, roles.id as role_id ,roles.name AS role_name
+                FROM users
+                         JOIN user_classes ON users.id = user_classes.user_id
+                         JOIN user_roles ON users.id = user_roles.user_id
+                         JOIN roles ON user_roles.role_id = roles.id
+                WHERE user_classes.class_id = ?
+                ORDER BY users.id;
+                """;
+        var statement = db.prepareStatement(query);
+        statement.setInt(1, classId);
+        ResultSet resultSet = statement.executeQuery();
+
+        Map<Integer, User> userMap = new HashMap<>();
+
+        while (resultSet.next()) {
+            int userId = resultSet.getInt("user_id");
+            String email = resultSet.getString("email");
+            String roleName = resultSet.getString("role_name");
+            int roleId = resultSet.getInt("user_id");
+
+            // Get user from map or create a new one if it doesn't exist
+            var user = userMap.getOrDefault(
+                    userId,
+                    new User(userId, email, "", new HashSet<>())
+            );
+            user.roles().add(new Role(roleId, roleName));
+
+            userMap.put(userId, user);
+        }
+
+        return new HashSet<>(userMap.values());
+    }
+
     private Set<CClass> extractclassesFromResultSet(ResultSet resultSet) throws SQLException {
         var classesMap = new HashMap<Integer, CClass>();
         var usersMap = new HashMap<Integer, User>();

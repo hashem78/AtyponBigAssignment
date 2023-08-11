@@ -39,7 +39,7 @@ public class GradeDao implements AutoCloseable {
     }
 
     public boolean updateGrade(int gradeId, int classId, int userId, float newGrade) throws SQLException {
-        String sql = "update grades set grade = ? where id = ? and class_id = ? and user_id = ?";
+        String sql = "update grades set grade = ? where (id = ? and class_id = ? and user_id = ?)";
 
         var statement = db.prepareStatement(sql);
         statement.setInt(1, gradeId);
@@ -49,7 +49,6 @@ public class GradeDao implements AutoCloseable {
 
         return statement.executeUpdate() > 0;
     }
-
     public List<Grade> getGrades(int classId, int userId) throws SQLException {
         String sql = """
                 SELECT

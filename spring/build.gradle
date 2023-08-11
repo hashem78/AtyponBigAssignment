@@ -26,8 +26,9 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation project(path: ':persistence')
-	implementation project(path: ':domain')
-	compileOnly 'org.projectlombok:lombok'
+    implementation project(path: ':domain')
+	implementation 'commons-codec:commons-codec:1.16.0'
+    compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	annotationProcessor 'org.projectlombok:lombok'
